@@ -1,4 +1,4 @@
-# DocSearch - Personal assistant
+# FindocAgent - Personal assistant
 
 > A TypeScript backend application with Claude Agent SDK, Obsidian MCP, and financial skills.
 
