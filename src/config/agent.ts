@@ -44,5 +44,14 @@ export const MCP_SERVERS = process.env.OBSIDIAN_API_KEY ? {
   }
 } : undefined;
 
+// Skills configuration - preloaded skills for the agent
+export const SKILLS = ['finance-expert'];
+
+// Plugin configuration for local skills
+export const PLUGINS = [
+  { type: 'local' as const, path: '.agents/skills' }
+];
+
 // Debug: Log MCP configuration status
 console.log('MCP Servers configured:', MCP_SERVERS ? 'Yes (Obsidian enabled)' : 'No');
+console.log('Skills configured:', SKILLS);

@@ -3,7 +3,7 @@
  */
 
 import { query, SDKMessage, SDKResultMessage } from '@anthropic-ai/claude-agent-sdk';
-import { MCP_SERVERS, SYSTEM_PROMPT, ALLOWED_TOOLS } from '../config/agent.js';
+import { MCP_SERVERS, SYSTEM_PROMPT, ALLOWED_TOOLS, PLUGINS } from '../config/agent.js';
 import type { Message } from '../sessions/store.js';
 
 export interface StreamEvent {
@@ -43,6 +43,7 @@ export async function* streamAgentResponse(
         systemPrompt: SYSTEM_PROMPT,
         mcpServers: MCP_SERVERS,
         allowedTools: ALLOWED_TOOLS,
+        plugins: PLUGINS,
         permissionMode: 'bypassPermissions',
         cwd: process.cwd(),
         env: {
