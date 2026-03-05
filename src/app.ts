@@ -4,7 +4,7 @@
 
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
-import { logger } from 'hono/logger';
+import { requestLogger } from './middleware/requestLogger.js';
 import chatRoutes from './routes/chat.js';
 import healthRoutes from './routes/health.js';
 
@@ -12,7 +12,7 @@ const app = new Hono();
 
 // Middleware
 app.use('*', cors());
-app.use('*', logger());
+app.use('*', requestLogger);
 
 // Routes
 app.route('/chat', chatRoutes);

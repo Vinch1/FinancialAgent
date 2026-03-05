@@ -5,6 +5,7 @@
 import { query, SDKMessage, SDKResultMessage } from '@anthropic-ai/claude-agent-sdk';
 import { MCP_SERVERS, SYSTEM_PROMPT, ALLOWED_TOOLS, PLUGINS } from '../config/agent.js';
 import type { Message } from '../sessions/store.js';
+import { logger } from '../utils/logger.js';
 
 export interface StreamEvent {
   type: 'text' | 'tool_use' | 'complete' | 'error';
@@ -36,6 +37,13 @@ export async function* streamAgentResponse(
     fullPrompt = `${history}\n\nuser: ${prompt}`;
   }
 
+  logger.debug('agent', 'Starting query', {
+    promptLength: fullPrompt.length,
+    historyLength: options?.conversationHistory?.length || 0,
+    tools: ALLOWED_TOOLS.length,
+    mcpEnabled: !!MCP_SERVERS,
+  });
+
   try {
     const queryResult = query({
       prompt: fullPrompt,
@@ -56,10 +64,21 @@ export async function* streamAgentResponse(
     for await (const message of queryResult) {
       const event = mapMessageToEvent(message);
       if (event) {
+        if (event.type === 'text') {
+          logger.debug('agent', 'Streaming text', { content: event.content });
+        } else if (event.type === 'tool_use') {
+          logger.info('agent', 'Tool use', { tool: event.name });
+        } else if (event.type === 'complete') {
+          logger.info('agent', 'Query complete', {
+            duration_ms: event.duration_ms,
+            cost: event.cost,
+          });
+        }
         yield event;
       }
     }
   } catch (error) {
+    logger.error('agent', 'Query failed', error);
     yield {
       type: 'error',
       message: error instanceof Error ? error.message : String(error)
