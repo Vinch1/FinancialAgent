@@ -5,6 +5,16 @@
       "source": "personamanagmentlayer/pcl",
       "sourceType": "github",
       "computedHash": "83ff6d943fe47f1cec6c79b2d364303c2e058366c3fdfc6bc5938539cc914b33"
+    },
+    "obsidian-cli": {
+      "source": "kepano/obsidian-skills",
+      "sourceType": "github",
+      "computedHash": "89ded0eb1499286d5c95217df0ff7015aa46b7efe4646fafaba38cbac3289392"
+    },
+    "obsidian-markdown": {
+      "source": "kepano/obsidian-skills",
+      "sourceType": "github",
+      "computedHash": "9ca4f671ffecfd020c8d9c733aed75bde42742fb5545b48b6bf8e5e54111b9ac"
     }
   }
 }
