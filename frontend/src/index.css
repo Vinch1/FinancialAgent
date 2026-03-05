@@ -1,1 +1,107 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-paper-100 text-ink-800 font-body;
+  }
+
+  ::selection {
+    @apply bg-accent/20 text-ink-900;
+  }
+
+  ::-webkit-scrollbar {
+    @apply w-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-ink-200 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-ink-300;
+  }
+}
+
+@layer components {
+  .message-prose {
+    @apply text-ink-700 leading-relaxed;
+  }
+
+  .message-prose h1,
+  .message-prose h2,
+  .message-prose h3 {
+    @apply font-display text-ink-800 font-semibold mt-6 mb-3 first:mt-0;
+  }
+
+  .message-prose h1 {
+    @apply text-2xl;
+  }
+
+  .message-prose h2 {
+    @apply text-xl;
+  }
+
+  .message-prose h3 {
+    @apply text-lg;
+  }
+
+  .message-prose p {
+    @apply mb-4 last:mb-0;
+  }
+
+  .message-prose ul,
+  .message-prose ol {
+    @apply mb-4 pl-5;
+  }
+
+  .message-prose li {
+    @apply mb-1.5;
+  }
+
+  .message-prose ul li {
+    @apply list-disc;
+  }
+
+  .message-prose ol li {
+    @apply list-decimal;
+  }
+
+  .message-prose code {
+    @apply bg-paper-200 text-ink-700 px-1.5 py-0.5 rounded text-sm font-mono;
+  }
+
+  .message-prose pre {
+    @apply bg-ink-800 text-ink-100 p-4 rounded-lg mb-4 overflow-x-auto;
+  }
+
+  .message-prose pre code {
+    @apply bg-transparent text-inherit p-0;
+  }
+
+  .message-prose blockquote {
+    @apply border-l-4 border-accent/40 pl-4 italic text-ink-500 my-4;
+  }
+
+  .message-prose a {
+    @apply text-accent hover:text-accent-dark underline underline-offset-2;
+  }
+
+  .message-prose strong {
+    @apply font-semibold text-ink-800;
+  }
+
+  .message-prose hr {
+    @apply border-ink-200 my-6;
+  }
+}
