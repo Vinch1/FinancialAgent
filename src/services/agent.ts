@@ -3,7 +3,7 @@
  */
 
 import { query, SDKMessage, SDKResultMessage } from '@anthropic-ai/claude-agent-sdk';
-import { MCP_SERVERS, SYSTEM_PROMPT, ALLOWED_TOOLS, PLUGINS } from '../config/agent.js';
+import { SYSTEM_PROMPT, ALLOWED_TOOLS, PLUGINS } from '../config/agent.js';
 import type { Message } from '../sessions/store.js';
 import { logger } from '../utils/logger.js';
 
@@ -41,7 +41,6 @@ export async function* streamAgentResponse(
     promptLength: fullPrompt.length,
     historyLength: options?.conversationHistory?.length || 0,
     tools: ALLOWED_TOOLS.length,
-    mcpEnabled: !!MCP_SERVERS,
   });
 
   try {
@@ -49,7 +48,6 @@ export async function* streamAgentResponse(
       prompt: fullPrompt,
       options: {
         systemPrompt: SYSTEM_PROMPT,
-        mcpServers: MCP_SERVERS,
         allowedTools: ALLOWED_TOOLS,
         plugins: PLUGINS,
         permissionMode: 'bypassPermissions',
