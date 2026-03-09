@@ -11,6 +11,7 @@
     "dev": "node --loader ts-node/esm src/index.ts",
     "serve": "node dist/index.js",
     "build:backend": "tsc && pkg dist/index.js --targets node18-win-x64 --output src-tauri/binaries/docsearch-backend-x86_64-pc-windows-msvc.exe",
+    "dev:desktop": "concurrently \"npm run dev\" \"npx tauri dev\"",
     "tauri:dev": "npm run build:backend && tauri dev",
     "tauri:build": "npm run build:backend && tauri build"
   },
@@ -32,6 +33,7 @@
   "devDependencies": {
     "@tauri-apps/cli": "^2.10.1",
     "@types/node": "^22.0.0",
+    "concurrently": "^9.2.1",
     "pkg": "^5.8.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.0"
