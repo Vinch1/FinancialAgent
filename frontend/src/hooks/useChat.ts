@@ -1,7 +1,20 @@
 import { useState, useCallback, useRef } from 'react';
 import type { Message, UseChatReturn, SessionResponse } from '../types';
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || '';
+// Detect if running in Tauri
+const isTauri = typeof window !== 'undefined' && '__TAURI__' in window;
+
+// In Tauri, backend runs on localhost:3000
+// In web dev, use empty string (proxied through Vite)
+// In web production, use VITE_API_BASE_URL
+const getApiBase = (): string => {
+  if (isTauri) {
+    return 'http://localhost:3000';
+  }
+  return import.meta.env.VITE_API_BASE_URL || '';
+};
+
+const API_BASE = getApiBase();
 
 /**
  * Generate a unique ID for client-side messages
