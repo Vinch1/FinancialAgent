@@ -54,7 +54,8 @@ export async function* streamAgentResponse(
         cwd: process.cwd(),
         env: {
           ...process.env,
-          ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY || ''
+          ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY || '',
+          "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
         }
       }
     });
