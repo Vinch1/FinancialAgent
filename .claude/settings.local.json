@@ -8,10 +8,9 @@
       "Bash(npx tsc:*)",
       "Bash(grep:*)",
       "Bash(uvx:*)",
-      "Bash(where uvx:*)"
+      "Bash(where uvx:*)",
+      "Bash(ls:*)",
+      "Bash(bun:*)"
     ]
-  },
-  "env": {
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   }
 }

@@ -3,7 +3,7 @@
  */
 
 import { query, SDKMessage, SDKResultMessage } from '@anthropic-ai/claude-agent-sdk';
-import { SYSTEM_PROMPT, ALLOWED_TOOLS, PLUGINS } from '../config/agent.js';
+import { SYSTEM_PROMPT, ALLOWED_TOOLS } from '../config/agent.js';
 import type { Message } from '../sessions/store.js';
 import { logger } from '../utils/logger.js';
 
@@ -49,13 +49,14 @@ export async function* streamAgentResponse(
       options: {
         systemPrompt: SYSTEM_PROMPT,
         allowedTools: ALLOWED_TOOLS,
-        plugins: PLUGINS,
+        // plugins: PLUGINS,
+        settingSources: ['project'],
         permissionMode: 'bypassPermissions',
         cwd: process.cwd(),
         env: {
           ...process.env,
-          ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY || '',
-          "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+          ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY || ''
+          // "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
         }
       }
     });
