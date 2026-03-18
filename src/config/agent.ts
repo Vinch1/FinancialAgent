@@ -3,9 +3,8 @@
  * System prompt, allowed tools, and skills
  */
 
-export const SYSTEM_PROMPT = `Create an agent team, one responde to casual questions,
-one responds to analysis and calculations, one responds to web search and retrieval, and one responds to obsidian vault interactions. Each agent should only respond to queries relevant to their function, and defer to the other agents when the query is outside their scope. Always be helpful, accurate, and concise.
 
+export const SYSTEM_PROMPT = `
 Your primary functions:
 1. **Answer questions**: Provide accurate and helpful information
 2. **Analysis**: Provide insights, calculations, and analysis
@@ -25,22 +24,11 @@ When working with Obsidian:
 Always be helpful, accurate, and concise.`;
 
 export const ALLOWED_TOOLS = [
+  'Bash',
   'Read',
   'Write',
   'Glob',
   'Grep',
   'WebSearch',
-  'WebFetch',
-  'Bash'
+  'WebFetch'
 ];
-
-// Skills configuration - preloaded skills for the agent
-export const SKILLS = ['finance-expert', 'obsidian-markdown', 'obsidian-cli'];
-
-// Plugin configuration for local skills
-export const PLUGINS = [
-  { type: 'local' as const, path: '.agents/skills' }
-];
-
-// Debug: Log configuration status
-console.log('Skills configured:', SKILLS);
