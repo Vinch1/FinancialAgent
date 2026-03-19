@@ -11,6 +11,7 @@ export interface StreamEvent {
   type: 'text' | 'tool_use' | 'complete' | 'error';
   content?: string;
   name?: string;
+  input?: Record<string, unknown>;
   duration_ms?: number;
   cost?: number;
   message?: string;
@@ -67,7 +68,12 @@ export async function* streamAgentResponse(
         if (event.type === 'text') {
           logger.debug('agent', 'Streaming text', { content: event.content });
         } else if (event.type === 'tool_use') {
-          logger.info('agent', 'Tool use', { tool: event.name });
+          const logData: Record<string, unknown> = { tool: event.name };
+          // Extract specific skill name for Skill tool
+          if (event.name === 'Skill' && event.input?.skill) {
+            logData.skill = event.input.skill;
+          }
+          logger.info('agent', 'Tool use', logData);
         } else if (event.type === 'complete') {
           logger.info('agent', 'Query complete', {
             duration_ms: event.duration_ms,
@@ -97,7 +103,7 @@ function mapMessageToEvent(message: SDKMessage): StreamEvent | null {
         if (block.type === 'text') {
           return { type: 'text', content: block.text };
         } else if (block.type === 'tool_use') {
-          return { type: 'tool_use', name: block.name };
+          return { type: 'tool_use', name: block.name, input: block.input as Record<string, unknown> };
         }
       }
       return null;
