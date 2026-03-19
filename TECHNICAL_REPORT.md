@@ -501,7 +501,7 @@ PORT=3000
 
 ### 8.3 Build Output
 
-After `npm run build`:
+After `bun run build`:
 ```
 dist/
 ├── index.js           # Entry point

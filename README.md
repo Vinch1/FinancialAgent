@@ -10,22 +10,22 @@
         - **Financial Skills**: Custom tools for compound interest, loan payment, investment returns, budget analysis, and currency conversion
 
 -
-        - Run with `npm run dev` or `node --loader ts-node/esm src/index.ts`
+        - Run with `bun run dev` or `bun src/index.ts`
 - -
-        - Build: `npm run build`
-        - typecheck: `npm run typecheck`
+        - Build: `bun run build`
+        - typecheck: `bun run typecheck`
 -
         - get started:
             - Ask questions one at a time in the REPL shell
             - Use the configuration from the file
 
-            - Run `npm start` (for development)
-            - run `node --loader ts-node/esm src/index.ts` (production)
-    - Or run `npm run build && npm run typecheck` first
+            - Run `bun start` (for development)
+            - run `bun src/index.ts` (production)
+    - Or run `bun run build && bun run typecheck` first
 - - Update README: CLAUDE.md
             - write instructions for AI-assisted development
         - Update readme if your API key changes
 - - update `.env.example` file with actual values
 
-- run `npm install @anthropic-ai/claude-agent-sdk zod dotenv`
+- run `bun add @anthropic-ai/claude-agent-sdk zod dotenv`
 - - Follow official documentation
