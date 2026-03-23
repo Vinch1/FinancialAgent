@@ -1,26 +1,88 @@
 ---
 name: per-option-value
-description: Calculate per-option value for employee stock options (ESOs) using the John Hull Enhanced FASB 123 trinomial tree model. Use this skill whenever the user asks about ESO valuation, employee stock option pricing, per-option value calculations, option expensing under ASC 718/FAS 123, or needs to value stock options with vesting, forfeiture, and early exercise behavior.
+description: Generate ESO (Employee Stock Option) valuation reports using the John Hull Enhanced FASB 123 trinomial tree model. Use this skill when the user needs to value employee stock options, calculate per-option values, or generate ESO valuation reports. 
 ---
 
 # Per-Option Value Calculator (John Hull ESO Model)
 
-This skill calculates the fair value of employee stock options using the Enhanced FASB 123 trinomial tree methodology developed by John Hull. This model accounts for:
+This skill calculates the fair value of employee stock options using the Enhanced FASB 123 trinomial tree methodology developed by John Hull, then generates a valuation report.
 
-- **Vesting periods** - Options cannot be exercised before vesting
-- **Forfeiture rates** - Employee departures before and after vesting
-- **Early exercise behavior** - Employees tend to exercise when stock price exceeds a multiple of strike price
-- **Dividend yield** - Continuous dividend payments on the underlying stock
+## Workflow
 
-## When to Use This Skill
+1. Collect all required information from the user
+2. Calculate derived parameters from dates
+3. Run the per-option value calculation
+4. Fill the report template with all data
 
-Use this skill when the user needs to:
-- Calculate the fair value of employee stock options for accounting purposes (ASC 718/FAS 123R)
-- Value ESOs for compensation expense recognition
-- Determine per-option value for option grant valuation
-- Model option exercise behavior with vesting and forfeiture assumptions
+## Step 1: Collect Information from User
 
-## How to Run the Calculation
+Collect parameters **one by one** in a conversational manner. Ask for one parameter, wait for the user's response, then ask for the next one. Do not present all questions at once.
+
+**Asking order:**
+
+1. Valuation Date
+2. Grant Date of the Subject
+3. Maturity Date
+4. Exercise Price
+5. Vesting Date
+6. Report Recipient (Employee / Director / Both)
+7. Stock Price (`--S`)
+8. Strike Price (`--K`)
+9. Volatility (`--V`) - Annual volatility (decimal)
+10. Risk-free Rate (`--R`) - Annual risk-free rate (decimal)
+11. Dividend Yield (`--Q`) - Annual dividend yield (decimal)
+12. Post-vest Exit Rate (`--postVest`) - Annual exit rate after vesting
+
+**Date Format:** Use format "12 December 2023" (day month year) for all dates.
+
+**Default Values (do not ask):**
+- Pre-vest Exit Rate (`--preVest`): 0.0
+- Exercise Multiple (`--exMult`): 2.2 for Employee, 2.8 for Director (based on Report Recipient)
+
+After collecting all parameters, proceed to Step 2.
+
+### Default Values (no user input needed)
+
+These parameters use fixed defaults and should not be asked from the user:
+
+| Parameter | Default Value |
+|-----------|---------------|
+| Pre-vest Exit Rate (`--preVest`) | 0.0 |
+
+Still pass these defaults to the calculation and xlsx skill.
+
+### Exercise Multiple Rules
+
+The Exercise Multiple has conditional defaults based on the report recipient:
+
+| Recipient | Default Exercise Multiple |
+|-----------|---------------------------|
+| Employee | 2.2 |
+| Director | 2.8 |
+
+**Important - "Both" Recipient Handling:**
+If Report Recipient is "Both", you must run the calculation script **twice**:
+1. First run: Exercise Multiple = 2.2 (Employee calculation)
+2. Second run: Exercise Multiple = 2.8 (Director calculation)
+
+Keep both calculation results - you will pass them to the xlsx skill together so the report contains both values.
+
+If the user specifies a custom Exercise Multiple, use that value instead of the default.
+
+- [ ] Exercise Multiple (`--exMult`) - Provided: ___ (or default based on recipient: ___)
+
+## Step 2: Calculate Derived Parameters
+
+Calculate these values from the dates provided:
+
+| Derived Parameter | Calculation |
+|-------------------|-------------|
+| Time to Maturity (`--T`) | Maturity Date - Valuation Date (in years) |
+| Time to Vest (`--vestTime`) | Vesting Date - Grant Date of the Subject (in years) |
+
+Show the user the calculated values before proceeding.
+
+## Step 3: Run the Calculation
 
 The script is bundled with this skill. Run it from the project root:
 
@@ -28,31 +90,8 @@ The script is bundled with this skill. Run it from the project root:
 bun .claude/skills/per-option-value/scripts/JohnHullESO.ts [options]
 ```
 
-When invoking this skill, run the script with the user's parameters.
+### Example Usage
 
-## Input Parameters
-
-| Parameter | Flag | Description | Default |
-|-----------|------|-------------|---------|
-| Stock Price | `--S` | Current stock price | 0.101 |
-| Strike Price | `--K` | Exercise/strike price | 0.180 |
-| Total Term | `--T` | Option life in years | 2.0 |
-| Volatility | `--V` | Annual volatility (decimal) | 0.5084 |
-| Risk-free Rate | `--R` | Annual risk-free rate (decimal) | 0.0387 |
-| Dividend Yield | `--Q` | Annual dividend yield (decimal) | 0.0 |
-| Exercise Multiple | `--exMult` | Stock price / Strike ratio at which employees exercise | 1.44 |
-| Pre-vest Exit Rate | `--preVest` | Annual forfeiture rate before vesting | 0.0 |
-| Post-vest Exit Rate | `--postVest` | Annual exit rate after vesting | 0.2485 |
-| Vesting Time | `--vestTime` | Years until options vest | 1.0 |
-
-## Example Usage
-
-### Basic calculation with default parameters:
-```bash
-bun .claude/skills/per-option-value/scripts/JohnHullESO.ts
-```
-
-### Custom valuation:
 ```bash
 bun .claude/skills/per-option-value/scripts/JohnHullESO.ts \
   --S 50.0 \
@@ -61,9 +100,9 @@ bun .claude/skills/per-option-value/scripts/JohnHullESO.ts \
   --V 0.35 \
   --R 0.04 \
   --Q 0.02 \
-  --exMult 2.0 \
+  --exMult 2.2 \
   --preVest 0.05 \
-  --postVest 0.10 \
+  --postVest 0.0 \
   --vestTime 2.0
 ```
 
@@ -72,52 +111,43 @@ bun .claude/skills/per-option-value/scripts/JohnHullESO.ts \
 bun .claude/skills/per-option-value/scripts/JohnHullESO.ts --help
 ```
 
-## Output Format
+## Step 4: Generate the Report
 
-The script outputs JSON with the calculated per-option value:
+After the calculation completes, fill the report template with all collected and calculated data.
 
-```json
-{
-  "inputs": {
-    "S": 0.101,
-    "K": 0.18,
-    "T": 2,
-    "Vol": 0.5084,
-    "r": 0.0387,
-    "q": 0,
-    "exMult": 1.44,
-    "preVest": 0,
-    "postVest": 0.2485,
-    "vestTime": 1
-  },
-  "PerOptionValue": 0.011
-}
-```
+**Template Location:** `.claude/skills/template/ESO_VD231212_v1.xlsm`
 
-## Model Assumptions
+Invoke the xlsx skill and pass ALL of the following data explicitly:
 
-The John Hull Enhanced FASB 123 model uses these key assumptions:
+**Report Information:**
+- Valuation Date
+- Grant Date of the Subject
+- Maturity Date
+- Exercise Price
+- Vesting Date
+- Report Recipient (Employee / Director / Both)
 
-1. **Trinomial tree** with 200 time steps for numerical accuracy
-2. **Exercise behavior**: Employees exercise when stock price >= (exercise multiple × strike price)
-3. **Forfeiture handling**: Pre-vest exits result in complete forfeiture; post-vest exits trigger immediate exercise of in-the-money options
-4. **Interpolation**: When exercise multiple is very close to current price/strike ratio, the model interpolates between two boundary cases
+**Calculation Parameters:**
+- Stock Price
+- Strike Price (same as Exercise Price)
+- Volatility
+- Risk-free Rate
+- Dividend Yield
+- Exercise Multiple (2.2 for Employee, 2.8 for Director)
+- Pre-vest Exit Rate
+- Post-vest Exit Rate
 
-## Parameter Selection Guidance
+**Derived Values:**
+- Time to Maturity (years)
+- Time to Vest (years)
 
-### Exercise Multiple
-- 1.0 = Exercise immediately when in-the-money (aggressive)
-- 1.5-2.0 = Common range based on empirical studies
-- Higher values = More conservative (higher option value)
+**Calculated Results:**
+- If Employee: Per-Option Value from exMult 2.2 run
+- If Director: Per-Option Value from exMult 2.8 run
+- If Both:
+  - Employee Per-Option Value: [result from exMult 2.2 run]
+  - Director Per-Option Value: [result from exMult 2.8 run]
 
-### Exit/Forfeiture Rates
-- Pre-vest: Typically 3-8% annually depending on company/industry
-- Post-vest: Often lower than pre-vest; consider employee turnover data
+The xlsx skill needs all these values to fill the template correctly.
 
-### Volatility
-- Use historical volatility of the stock (typically 30-60% for growth companies)
-- Can also use implied volatility from traded options if available
-
-### Vesting Period
-- Common: 1-4 years (cliff or graded vesting)
-- For graded vesting, run multiple calculations with different vest times and weight appropriately
+Save the completed report and provide the file path to the user.

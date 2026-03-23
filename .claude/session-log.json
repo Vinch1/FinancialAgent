@@ -1,0 +1,302 @@
+[
+  {
+    "session_id": "3e40bf31-7e58-4c3f-9395-6d1e497512fc",
+    "transcript_path": "/Users/aimpactaccelerator/.claude/projects/-Users-aimpactaccelerator-Documents-Projects-FinancialAgent/3e40bf31-7e58-4c3f-9395-6d1e497512fc.jsonl",
+    "cwd": "/Users/aimpactaccelerator/Documents/Projects/FinancialAgent",
+    "hook_event_name": "SessionStart",
+    "source": "startup",
+    "logged_at": "2026-03-23T11:28:41.453337",
+    "recent_files": [
+      {
+        "path": ".claude/hooks/load_plan.sh",
+        "modified": "2026-03-23T09:42:15.152466"
+      },
+      {
+        "path": ".claude/hooks/session_logger.py",
+        "modified": "2026-03-23T09:42:15.152720"
+      },
+      {
+        "path": ".claude/settings.local.json",
+        "modified": "2026-03-23T09:42:15.152879"
+      },
+      {
+        "path": "README.md",
+        "modified": "2026-03-23T09:42:15.133247"
+      },
+      {
+        "path": "TECHNICAL_REPORT.md",
+        "modified": "2026-03-23T09:42:15.133853"
+      },
+      {
+        "path": "frontend/README.md",
+        "modified": "2026-03-23T09:42:15.134443"
+      },
+      {
+        "path": "bun.lock",
+        "modified": "2026-03-19T16:47:52.997210"
+      },
+      {
+        "path": "package.json",
+        "modified": "2026-03-19T16:47:52.997609"
+      },
+      {
+        "path": "src/services/agent.ts",
+        "modified": "2026-03-19T16:40:17.201766"
+      },
+      {
+        "path": ".claude/skills/xlsx/SKILL.md",
+        "modified": "2026-03-19T13:58:44.001982"
+      }
+    ]
+  },
+  {
+    "session_id": "b6431658-15c5-4b61-b81b-f491817a08d4",
+    "transcript_path": "/Users/aimpactaccelerator/.claude/projects/-Users-aimpactaccelerator-Documents-Projects-FinancialAgent/b6431658-15c5-4b61-b81b-f491817a08d4.jsonl",
+    "cwd": "/Users/aimpactaccelerator/Documents/Projects/FinancialAgent",
+    "hook_event_name": "SessionStart",
+    "source": "startup",
+    "logged_at": "2026-03-23T11:43:54.878334",
+    "recent_files": [
+      {
+        "path": ".claude/hooks/load_plan.sh",
+        "modified": "2026-03-23T09:42:15.152466"
+      },
+      {
+        "path": ".claude/hooks/session_logger.py",
+        "modified": "2026-03-23T09:42:15.152720"
+      },
+      {
+        "path": ".claude/settings.local.json",
+        "modified": "2026-03-23T09:42:15.152879"
+      },
+      {
+        "path": "README.md",
+        "modified": "2026-03-23T09:42:15.133247"
+      },
+      {
+        "path": "TECHNICAL_REPORT.md",
+        "modified": "2026-03-23T09:42:15.133853"
+      },
+      {
+        "path": "frontend/README.md",
+        "modified": "2026-03-23T09:42:15.134443"
+      },
+      {
+        "path": "bun.lock",
+        "modified": "2026-03-19T16:47:52.997210"
+      },
+      {
+        "path": "package.json",
+        "modified": "2026-03-19T16:47:52.997609"
+      },
+      {
+        "path": "src/services/agent.ts",
+        "modified": "2026-03-19T16:40:17.201766"
+      },
+      {
+        "path": ".claude/skills/xlsx/SKILL.md",
+        "modified": "2026-03-19T13:58:44.001982"
+      }
+    ]
+  },
+  {
+    "session_id": "cdc8a0e8-e684-41d4-bab9-75c3ed3ab3ea",
+    "transcript_path": "/Users/aimpactaccelerator/.claude/projects/-Users-aimpactaccelerator-Documents-Projects-FinancialAgent/cdc8a0e8-e684-41d4-bab9-75c3ed3ab3ea.jsonl",
+    "cwd": "/Users/aimpactaccelerator/Documents/Projects/FinancialAgent",
+    "hook_event_name": "SessionStart",
+    "source": "startup",
+    "logged_at": "2026-03-23T11:43:54.878334",
+    "recent_files": [
+      {
+        "path": ".claude/hooks/load_plan.sh",
+        "modified": "2026-03-23T09:42:15.152466"
+      },
+      {
+        "path": ".claude/hooks/session_logger.py",
+        "modified": "2026-03-23T09:42:15.152720"
+      },
+      {
+        "path": ".claude/settings.local.json",
+        "modified": "2026-03-23T09:42:15.152879"
+      },
+      {
+        "path": "README.md",
+        "modified": "2026-03-23T09:42:15.133247"
+      },
+      {
+        "path": "TECHNICAL_REPORT.md",
+        "modified": "2026-03-23T09:42:15.133853"
+      },
+      {
+        "path": "frontend/README.md",
+        "modified": "2026-03-23T09:42:15.134443"
+      },
+      {
+        "path": "bun.lock",
+        "modified": "2026-03-19T16:47:52.997210"
+      },
+      {
+        "path": "package.json",
+        "modified": "2026-03-19T16:47:52.997609"
+      },
+      {
+        "path": "src/services/agent.ts",
+        "modified": "2026-03-19T16:40:17.201766"
+      },
+      {
+        "path": ".claude/skills/xlsx/SKILL.md",
+        "modified": "2026-03-19T13:58:44.001982"
+      }
+    ]
+  },
+  {
+    "session_id": "d4e34d74-6de6-4113-b1bf-b631c423de98",
+    "transcript_path": "/Users/aimpactaccelerator/.claude/projects/-Users-aimpactaccelerator-Documents-Projects-FinancialAgent/d4e34d74-6de6-4113-b1bf-b631c423de98.jsonl",
+    "cwd": "/Users/aimpactaccelerator/Documents/Projects/FinancialAgent",
+    "hook_event_name": "SessionStart",
+    "source": "startup",
+    "logged_at": "2026-03-23T11:49:07.107868",
+    "recent_files": [
+      {
+        "path": ".claude/hooks/load_plan.sh",
+        "modified": "2026-03-23T09:42:15.152466"
+      },
+      {
+        "path": ".claude/hooks/session_logger.py",
+        "modified": "2026-03-23T09:42:15.152720"
+      },
+      {
+        "path": ".claude/settings.local.json",
+        "modified": "2026-03-23T09:42:15.152879"
+      },
+      {
+        "path": "README.md",
+        "modified": "2026-03-23T09:42:15.133247"
+      },
+      {
+        "path": "TECHNICAL_REPORT.md",
+        "modified": "2026-03-23T09:42:15.133853"
+      },
+      {
+        "path": "frontend/README.md",
+        "modified": "2026-03-23T09:42:15.134443"
+      },
+      {
+        "path": "bun.lock",
+        "modified": "2026-03-19T16:47:52.997210"
+      },
+      {
+        "path": "package.json",
+        "modified": "2026-03-19T16:47:52.997609"
+      },
+      {
+        "path": "src/services/agent.ts",
+        "modified": "2026-03-19T16:40:17.201766"
+      },
+      {
+        "path": ".claude/skills/xlsx/SKILL.md",
+        "modified": "2026-03-19T13:58:44.001982"
+      }
+    ]
+  },
+  {
+    "session_id": "054b69d6-bad5-4345-b0eb-a909e40557fb",
+    "transcript_path": "/Users/aimpactaccelerator/.claude/projects/-Users-aimpactaccelerator-Documents-Projects-FinancialAgent/054b69d6-bad5-4345-b0eb-a909e40557fb.jsonl",
+    "cwd": "/Users/aimpactaccelerator/Documents/Projects/FinancialAgent",
+    "hook_event_name": "SessionStart",
+    "source": "startup",
+    "logged_at": "2026-03-23T11:49:07.107686",
+    "recent_files": [
+      {
+        "path": ".claude/hooks/load_plan.sh",
+        "modified": "2026-03-23T09:42:15.152466"
+      },
+      {
+        "path": ".claude/hooks/session_logger.py",
+        "modified": "2026-03-23T09:42:15.152720"
+      },
+      {
+        "path": ".claude/settings.local.json",
+        "modified": "2026-03-23T09:42:15.152879"
+      },
+      {
+        "path": "README.md",
+        "modified": "2026-03-23T09:42:15.133247"
+      },
+      {
+        "path": "TECHNICAL_REPORT.md",
+        "modified": "2026-03-23T09:42:15.133853"
+      },
+      {
+        "path": "frontend/README.md",
+        "modified": "2026-03-23T09:42:15.134443"
+      },
+      {
+        "path": "bun.lock",
+        "modified": "2026-03-19T16:47:52.997210"
+      },
+      {
+        "path": "package.json",
+        "modified": "2026-03-19T16:47:52.997609"
+      },
+      {
+        "path": "src/services/agent.ts",
+        "modified": "2026-03-19T16:40:17.201766"
+      },
+      {
+        "path": ".claude/skills/xlsx/SKILL.md",
+        "modified": "2026-03-19T13:58:44.001982"
+      }
+    ]
+  },
+  {
+    "session_id": "d423d63d-6259-4f28-99eb-ad38f93702b7",
+    "transcript_path": "/Users/aimpactaccelerator/.claude/projects/-Users-aimpactaccelerator-Documents-Projects-FinancialAgent/d423d63d-6259-4f28-99eb-ad38f93702b7.jsonl",
+    "cwd": "/Users/aimpactaccelerator/Documents/Projects/FinancialAgent",
+    "hook_event_name": "SessionStart",
+    "source": "startup",
+    "logged_at": "2026-03-23T11:56:26.182228",
+    "recent_files": [
+      {
+        "path": ".claude/hooks/load_plan.sh",
+        "modified": "2026-03-23T09:42:15.152466"
+      },
+      {
+        "path": ".claude/hooks/session_logger.py",
+        "modified": "2026-03-23T09:42:15.152720"
+      },
+      {
+        "path": ".claude/settings.local.json",
+        "modified": "2026-03-23T09:42:15.152879"
+      },
+      {
+        "path": "README.md",
+        "modified": "2026-03-23T09:42:15.133247"
+      },
+      {
+        "path": "TECHNICAL_REPORT.md",
+        "modified": "2026-03-23T09:42:15.133853"
+      },
+      {
+        "path": "frontend/README.md",
+        "modified": "2026-03-23T09:42:15.134443"
+      },
+      {
+        "path": "bun.lock",
+        "modified": "2026-03-19T16:47:52.997210"
+      },
+      {
+        "path": "package.json",
+        "modified": "2026-03-19T16:47:52.997609"
+      },
+      {
+        "path": "src/services/agent.ts",
+        "modified": "2026-03-19T16:40:17.201766"
+      },
+      {
+        "path": ".claude/skills/xlsx/SKILL.md",
+        "modified": "2026-03-19T13:58:44.001982"
+      }
+    ]
+  }
+]
