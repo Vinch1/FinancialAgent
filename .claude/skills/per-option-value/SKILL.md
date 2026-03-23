@@ -22,19 +22,20 @@ Collect parameters **one by one** in a conversational manner. Ask for one parame
 1. Client Name
 2. Valuation Subject
 3. Valuation Date
-4. Grant Date of the Subject
-5. Maturity Date
-6. Exercise Price
-7. Vesting Date
-8. Report Recipient (Employee / Director / Both)
-9. Total No. of Share Options Entitled to Employees / Directors (for "Both" recipient, ask for both values separately)
-10. Spot Price (`--S`)
-11. Strike Price (`--K`)
-12. Volatility (`--V`) - Annual volatility (decimal)
-13. Risk-free Rate (`--R`) - Annual risk-free rate (decimal)
-14. Dividend Yield (`--Q`) - Annual dividend yield (decimal)
-15. Post-vest Exit Rate (`--postVest`) - Annual exit rate after vesting (for "Both" recipient, ask for both values separately)
-16. Exercise Multiple (`--exMult`) - Ask the user: "Would you like to use the default Exercise Multiple? (Default: 2.2 for Employee, 2.8 for Director)"
+4. Currency Unit (e.g., USD, HKD)
+5. Grant Date of the Subject
+6. Maturity Date
+7. Exercise Price
+8. Vesting Date
+9. Report Recipient (Employee / Director / Both)
+10. Total No. of Share Options Entitled to Employees / Directors (for "Both" recipient, ask for both values separately)
+11. Spot Price (`--S`)
+12. Strike Price (`--K`)
+13. Volatility (`--V`) - Annual volatility (decimal)
+14. Risk-free Rate (`--R`) - Annual risk-free rate (decimal)
+15. Dividend Yield (`--Q`) - Annual dividend yield (decimal)
+16. Post-vest Exit Rate (`--postVest`) - Annual exit rate after vesting (for "Both" recipient, ask for both values separately)
+17. Exercise Multiple (`--exMult`) - Ask the user: "Would you like to use the default Exercise Multiple? (Default: 2.2 for Employee, 2.8 for Director)"
     - If yes: Use the default based on Report Recipient
     - If no: Ask for the custom Exercise Multiple value for both Employee and Director.
 
@@ -127,6 +128,7 @@ Invoke the xlsx skill from the project root and pass ALL of the following data e
 - Client Name
 - Valuation Subject
 - Valuation Date
+- Currency Unit
 - Grant Date of the Subject
 - Maturity Date
 - Exercise Price
