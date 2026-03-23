@@ -4,5 +4,28 @@
       "WebSearch",
       "Bash"
     ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/session_logger.py",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/load_plan.sh",
+            "timeout": 5,
+            "statusMessage": "Loading plan.md..."
+          }
+        ]
+      }
+    ]
   }
 }
