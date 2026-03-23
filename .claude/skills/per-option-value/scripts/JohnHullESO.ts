@@ -191,7 +191,7 @@ try {
   );
 
   console.log(JSON.stringify({
-    inputs: { S, K, T, Vol, r, q, exMult, preVest, postVest, vestTime },
+    // inputs: { S, K, T, Vol, r, q, exMult, preVest, postVest, vestTime },
     PerOptionValue: Math.round(value * 1000) / 1000,
   }));
 } catch (err: any) {

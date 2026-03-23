@@ -19,25 +19,29 @@ This skill calculates the fair value of employee stock options using the Enhance
 Collect parameters **one by one** in a conversational manner. Ask for one parameter, wait for the user's response, then ask for the next one. Do not present all questions at once.
 
 **Asking order:**
-
-1. Valuation Date
-2. Grant Date of the Subject
-3. Maturity Date
-4. Exercise Price
-5. Vesting Date
-6. Report Recipient (Employee / Director / Both)
-7. Stock Price (`--S`)
-8. Strike Price (`--K`)
-9. Volatility (`--V`) - Annual volatility (decimal)
-10. Risk-free Rate (`--R`) - Annual risk-free rate (decimal)
-11. Dividend Yield (`--Q`) - Annual dividend yield (decimal)
-12. Post-vest Exit Rate (`--postVest`) - Annual exit rate after vesting
+1. Client Name
+2. Valuation Subject
+3. Valuation Date
+4. Grant Date of the Subject
+5. Maturity Date
+6. Exercise Price
+7. Vesting Date
+8. Report Recipient (Employee / Director / Both)
+9. Total No. of Share Options Entitled to Employees / Directors (for "Both" recipient, ask for both values separately)
+10. Spot Price (`--S`)
+11. Strike Price (`--K`)
+12. Volatility (`--V`) - Annual volatility (decimal)
+13. Risk-free Rate (`--R`) - Annual risk-free rate (decimal)
+14. Dividend Yield (`--Q`) - Annual dividend yield (decimal)
+15. Post-vest Exit Rate (`--postVest`) - Annual exit rate after vesting (for "Both" recipient, ask for both values separately)
+16. Exercise Multiple (`--exMult`) - Ask the user: "Would you like to use the default Exercise Multiple? (Default: 2.2 for Employee, 2.8 for Director)"
+    - If yes: Use the default based on Report Recipient
+    - If no: Ask for the custom Exercise Multiple value for both Employee and Director.
 
 **Date Format:** Use format "12 December 2023" (day month year) for all dates.
 
 **Default Values (do not ask):**
 - Pre-vest Exit Rate (`--preVest`): 0.0
-- Exercise Multiple (`--exMult`): 2.2 for Employee, 2.8 for Director (based on Report Recipient)
 
 After collecting all parameters, proceed to Step 2.
 
@@ -62,14 +66,14 @@ The Exercise Multiple has conditional defaults based on the report recipient:
 
 **Important - "Both" Recipient Handling:**
 If Report Recipient is "Both", you must run the calculation script **twice**:
-1. First run: Exercise Multiple = 2.2 (Employee calculation)
-2. Second run: Exercise Multiple = 2.8 (Director calculation)
+- If user confirmed default Exercise Multiple:
+  1. First run: Exercise Multiple = 2.2 (Employee calculation)
+  2. Second run: Exercise Multiple = 2.8 (Director calculation)
+- If user specified custom Exercise Multiple values:
+  1. First run: Use the Employee custom Exercise Multiple value
+  2. Second run: Use the Director custom Exercise Multiple value
 
 Keep both calculation results - you will pass them to the xlsx skill together so the report contains both values.
-
-If the user specifies a custom Exercise Multiple, use that value instead of the default.
-
-- [ ] Exercise Multiple (`--exMult`) - Provided: ___ (or default based on recipient: ___)
 
 ## Step 2: Calculate Derived Parameters
 
@@ -82,7 +86,7 @@ Calculate these values from the dates provided:
 
 Show the user the calculated values before proceeding.
 
-## Step 3: Run the Calculation
+## Step 3: Run the Calculation to get PerOptionValue
 
 The script is bundled with this skill. Run it from the project root:
 
@@ -115,11 +119,13 @@ bun .claude/skills/per-option-value/scripts/JohnHullESO.ts --help
 
 After the calculation completes, fill the report template with all collected and calculated data.
 
-**Template Location:** `.claude/skills/template/ESO_VD231212_v1.xlsm`
+Invoke the xlsx skill from the project root and pass ALL of the following data explicitly:
 
-Invoke the xlsx skill and pass ALL of the following data explicitly:
+**Template Location:** `.claude/skills/template/ESO template.xlsx`
 
 **Report Information:**
+- Client Name
+- Valuation Subject
 - Valuation Date
 - Grant Date of the Subject
 - Maturity Date
@@ -128,12 +134,12 @@ Invoke the xlsx skill and pass ALL of the following data explicitly:
 - Report Recipient (Employee / Director / Both)
 
 **Calculation Parameters:**
-- Stock Price
+- Spot Price
 - Strike Price (same as Exercise Price)
 - Volatility
 - Risk-free Rate
 - Dividend Yield
-- Exercise Multiple (2.2 for Employee, 2.8 for Director)
+- Exercise Multiple (Custom or default based on recipient)
 - Pre-vest Exit Rate
 - Post-vest Exit Rate
 
@@ -142,12 +148,12 @@ Invoke the xlsx skill and pass ALL of the following data explicitly:
 - Time to Vest (years)
 
 **Calculated Results:**
-- If Employee: Per-Option Value from exMult 2.2 run
-- If Director: Per-Option Value from exMult 2.8 run
+- If Employee: PerOptionValue from Employee exMult run
+- If Director: PerOptionValue from Director exMult run
 - If Both:
-  - Employee Per-Option Value: [result from exMult 2.2 run]
-  - Director Per-Option Value: [result from exMult 2.8 run]
+  - Employee PerOptionValue: [result from Employee exMult run]
+  - Director PerOptionValue: [result from Director exMult run]
 
 The xlsx skill needs all these values to fill the template correctly.
-
-Save the completed report and provide the file path to the user.
+Report filename should follow the format: `ESO_Valuation_Report_[ClientName]_[TimeStamp].xlsx`
+Save the completed report to ".claude/skills/per-option-value/reports/" and provide the file path to the user.
