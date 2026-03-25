@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MiniMaxAIDocx.Core")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+10d5d52a64b8ba4f4b015f5234247848c9392dbb")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dc287bac02f0eca83b86395fd4b5f4ec594d06ef")]
 [assembly: System.Reflection.AssemblyProductAttribute("MiniMaxAIDocx.Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MiniMaxAIDocx.Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
