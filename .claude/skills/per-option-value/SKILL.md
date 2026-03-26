@@ -21,23 +21,23 @@ This skill calculates the fair value of employee stock options using the Enhance
 Collect parameters **one by one** in a conversational manner. Ask for one parameter, wait for the user's response, then ask for the next one. Do not present all questions at once.
 
 **Asking order:**
-1. Client Name
-2. Valuation Subject
-3. Valuation Date
-4. Currency Unit (e.g., USD, HKD)
-5. Grant Date of the Subject
-6. Maturity Date
-7. Exercise Price
-8. Vesting Date
-9. Report Recipient (Employee / Director / Both)
-10. Total No. of Share Options to Employees / Directors (for "Both" recipient, ask for both values separately)
-11. Spot Price (`--S`)
-12. Strike Price (`--K`)
-13. Volatility (`--V`) - Annual volatility (decimal)
-14. Risk-free Rate (`--R`) - Annual risk-free rate (decimal)
-15. Dividend Yield (`--Q`) - Annual dividend yield (decimal)
-16. Post-vest Exit Rate (`--postVest`) - Annual exit rate after vesting (for "Both" recipient, ask for both values separately)
-17. Exercise Multiple (`--exMult`) - Ask the user: "Would you like to use the default Exercise Multiple? (Default: 2.2 for Employee, 2.8 for Director)"
+- Client Name
+- Valuation Subject
+- Valuation Date
+- Currency Unit (e.g., USD, HKD)
+- Grant Date of the Subject
+- Maturity Date
+- Exercise Price
+- Vesting Date
+- Report Recipient (Employee / Director / Both)
+- Total No. of Share Options to Employees / Directors (for "Both" recipient, ask for both values separately)
+- Spot Price (`--S`)
+- Strike Price (`--K`)
+- Volatility (`--V`) - Annual volatility (decimal)
+- Risk-free Rate (`--R`) - Annual risk-free rate (decimal)
+- Dividend Yield (`--Q`) - Annual dividend yield (decimal)
+- Post-vest Exit Rate (`--postVest`) - Annual exit rate after vesting (for "Both" recipient, ask for both values separately)
+- Exercise Multiple (`--exMult`) - Ask the user: "Would you like to use the default Exercise Multiple? (Default: 2.2 for Employee, 2.8 for Director)"
     - If yes: Use the default based on Report Recipient
     - If no: Ask for the custom Exercise Multiple value for both Employee and Director.
 
@@ -210,6 +210,22 @@ The following data is already collected in Step 1 and should be passed directly 
 - TotalOptionValue = TotalOptionValueEmployee + TotalOptionValueDirector
 - TotalNoOfShareOptions = Total No. of Share Options to Employees + Total No. of Share Options to Directors
 
+**Conditional Variables**
+
+| Variable | Condition | Value |
+|----------|-----------|-------|
+| ExerciseMultipleSource | Exercise Multiple is default (user confirmed default) | `"Accounting for Employee Stock Options" by John Hull and Alan White` |
+| ExerciseMultipleSource | Exercise Multiple is custom (user provided value) | `Management` |
+| ExerciseMultipleNote | Exercise Multiple is default (user confirmed default) | `Average ratio of top executives/employees` |
+| ExerciseMultipleNote | Exercise Multiple is custom (user provided value) | `Historical exercise behaviour of top executives/employees` |
+| HKAS_IAS_Desc | HKAS_IAS is "HKAS" | `Hong Kong Accounting Standard(s)` |
+| HKAS_IAS_Desc | HKAS_IAS is not "HKAS" (e.g., "IAS") | `International Valuation Standard(s)` |
+| HKFRS_IFRS_Desc | HKFRS_IFRS is "HKFRS" | `Hong Kong Financial Reporting Standard(s)` |
+| HKFRS_IFRS_Desc | HKFRS_IFRS is not "HKFRS" (e.g., "IFRS") | `International Financial Reporting Standard(s)` |
+| CurrencyUnitDesc | CurrencyUnit is "HKD" | `Hong Kong Dollars` |
+| CurrencyUnitDesc | CurrencyUnit is "RMB" or "CNY" | `Renminbi` |
+| CurrencyUnitDesc | CurrencyUnit is "USD" | `United States Dollar` |
+
 ## Step 7: Generate the DOCX Report
 
 Invoke the **minimax-docx** skill to generate the DOCX report.
@@ -254,7 +270,12 @@ When using the minimax-docx skill, use the `fill-placeholders` command with the 
   "TotalOptionValueEmployee": "[computed value]",
   "TotalOptionValueDirector": "[computed value]",
   "TotalOptionValue": "[computed value]",
-  "TotalNoOfShareOptions": "[computed value]"
+  "TotalNoOfShareOptions": "[computed value]",
+  "ExerciseMultipleSource": "[conditional based on default/custom Exercise Multiple]",
+  "ExerciseMultipleNote": "[conditional based on default/custom Exercise Multiple]",
+  "HKAS_IAS_Desc": "[conditional based on HKAS_IAS value]",
+  "HKFRS_IFRS_Desc": "[conditional based on HKFRS_IFRS value]",
+  "CurrencyUnitDesc": "[conditional based on CurrencyUnit value]"
 }
 ```
 
