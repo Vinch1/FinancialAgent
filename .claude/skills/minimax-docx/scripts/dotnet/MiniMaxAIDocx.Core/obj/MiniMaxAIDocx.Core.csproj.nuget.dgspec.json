@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\tommy\\Documents\\Github\\simple-agent\\.claude\\skills\\minimax-docx\\scripts\\dotnet\\MiniMaxAIDocx.Core\\MiniMaxAIDocx.Core.csproj": {}
+    "c:\\Users\\tommy\\Documents\\Github\\simple-agent\\.claude\\skills\\minimax-docx\\scripts\\dotnet\\MiniMaxAIDocx.Core\\MiniMaxAIDocx.Core.csproj": {}
   },
   "projects": {
-    "C:\\Users\\tommy\\Documents\\Github\\simple-agent\\.claude\\skills\\minimax-docx\\scripts\\dotnet\\MiniMaxAIDocx.Core\\MiniMaxAIDocx.Core.csproj": {
+    "c:\\Users\\tommy\\Documents\\Github\\simple-agent\\.claude\\skills\\minimax-docx\\scripts\\dotnet\\MiniMaxAIDocx.Core\\MiniMaxAIDocx.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\tommy\\Documents\\Github\\simple-agent\\.claude\\skills\\minimax-docx\\scripts\\dotnet\\MiniMaxAIDocx.Core\\MiniMaxAIDocx.Core.csproj",
+        "projectUniqueName": "c:\\Users\\tommy\\Documents\\Github\\simple-agent\\.claude\\skills\\minimax-docx\\scripts\\dotnet\\MiniMaxAIDocx.Core\\MiniMaxAIDocx.Core.csproj",
         "projectName": "MiniMaxAIDocx.Core",
-        "projectPath": "C:\\Users\\tommy\\Documents\\Github\\simple-agent\\.claude\\skills\\minimax-docx\\scripts\\dotnet\\MiniMaxAIDocx.Core\\MiniMaxAIDocx.Core.csproj",
+        "projectPath": "c:\\Users\\tommy\\Documents\\Github\\simple-agent\\.claude\\skills\\minimax-docx\\scripts\\dotnet\\MiniMaxAIDocx.Core\\MiniMaxAIDocx.Core.csproj",
         "packagesPath": "C:\\Users\\tommy\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\tommy\\Documents\\Github\\simple-agent\\.claude\\skills\\minimax-docx\\scripts\\dotnet\\MiniMaxAIDocx.Core\\obj\\",
+        "outputPath": "c:\\Users\\tommy\\Documents\\Github\\simple-agent\\.claude\\skills\\minimax-docx\\scripts\\dotnet\\MiniMaxAIDocx.Core\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\tommy\\AppData\\Roaming\\NuGet\\NuGet.Config"

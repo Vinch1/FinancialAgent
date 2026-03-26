@@ -182,8 +182,8 @@ Collect the following additional information **one by one** in a conversational 
 
 1. **Client Company Name** - The full legal name of the client company
 2. **Reference Number** - The reference number for this valuation engagement
-3. **use HKAS or IAS** - The Hong Kong/International Accounting Standard reference (e.g., "HKAS 2", "IAS 19")
-4. **use HKFRS or IFRS** - The Hong Kong/International Financial Reporting Standard reference (e.g., "HKFRS 2", "IFRS 2")
+3. **use HKAS or IAS** - The Hong Kong/International Accounting Standard reference (e.g., "HKAS", "IAS")
+4. **use HKFRS or IFRS** - The Hong Kong/International Financial Reporting Standard reference (e.g., "HKFRS", "IFRS")
 5. **Client Address** - The client's registered address
    - **Important:** Inform the user: "Please use ',' to separate different parts of the address (e.g., 'Room 1001, 10/F, Tower A, ABC Building, 123 Queen's Road, Hong Kong')"
 
@@ -230,13 +230,13 @@ The following data is already collected in Step 1 and should be passed directly 
 
 Invoke the **minimax-docx** skill to generate the DOCX report.
 
-**Template Location:** `.claude/skills/per-option-value/template/ESO_Report Template_v2.docx`
+** DOCX Report Template Location:** `.claude/skills/per-option-value/template/ESO_Report Template_v2.docx`
 
 If the template does not exist, inform the user and ask if they would like to proceed by creating a new document from scratch using the minimax-docx skill.
 
 **Placeholder Mapping:**
 
-When using the minimax-docx skill, use the `fill-placeholders` command with the following JSON structure:
+ JSON structure:
 
 ```json
 {
@@ -278,15 +278,16 @@ When using the minimax-docx skill, use the `fill-placeholders` command with the 
   "CurrencyUnitDesc": "[conditional based on CurrencyUnit value]"
 }
 ```
+Create a temporary mapping.json file first and always use dotnet CLI to run the minimax-docx skill. Use the `fill-placeholders` command with '--mapping' mapping.json file. Forbit using Python.
 
 **CLI Command Example:**
 
 ```bash
 dotnet run --project .claude/skills/minimax-docx/scripts/dotnet/MiniMaxAIDocx.Cli -- \
   edit fill-placeholders \
-  --input .claude/skills/per-option-value/template/ESO_Valuation_Report_Template.docx \
+  --input .claude/skills/per-option-value/template/ESO_Report Template_v2.docx \
   --output .claude/skills/per-option-value/reports/ESO_Valuation_Report_[ClientCompanyName]_DOCX.docx \
-  --data '{"ClientCompanyName":"...", "ReferenceNumber":"...", ...}'
+  --mapping ./mapping.json
 ```
 
 **Report filename should follow the format:** `ESO_Valuation_Report_[ClientCompanyName]_DOCX.docx`

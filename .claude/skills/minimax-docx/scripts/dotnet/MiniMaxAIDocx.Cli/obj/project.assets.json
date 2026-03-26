@@ -265,11 +265,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\tommy\\Documents\\Github\\simple-agent\\.claude\\skills\\minimax-docx\\scripts\\dotnet\\MiniMaxAIDocx.Cli\\MiniMaxAIDocx.Cli.csproj",
+      "projectUniqueName": "c:\\Users\\tommy\\Documents\\Github\\simple-agent\\.claude\\skills\\minimax-docx\\scripts\\dotnet\\MiniMaxAIDocx.Cli\\MiniMaxAIDocx.Cli.csproj",
       "projectName": "MiniMaxAIDocx.Cli",
-      "projectPath": "C:\\Users\\tommy\\Documents\\Github\\simple-agent\\.claude\\skills\\minimax-docx\\scripts\\dotnet\\MiniMaxAIDocx.Cli\\MiniMaxAIDocx.Cli.csproj",
+      "projectPath": "c:\\Users\\tommy\\Documents\\Github\\simple-agent\\.claude\\skills\\minimax-docx\\scripts\\dotnet\\MiniMaxAIDocx.Cli\\MiniMaxAIDocx.Cli.csproj",
       "packagesPath": "C:\\Users\\tommy\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\tommy\\Documents\\Github\\simple-agent\\.claude\\skills\\minimax-docx\\scripts\\dotnet\\MiniMaxAIDocx.Cli\\obj\\",
+      "outputPath": "c:\\Users\\tommy\\Documents\\Github\\simple-agent\\.claude\\skills\\minimax-docx\\scripts\\dotnet\\MiniMaxAIDocx.Cli\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\tommy\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -284,8 +284,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\tommy\\Documents\\Github\\simple-agent\\.claude\\skills\\minimax-docx\\scripts\\dotnet\\MiniMaxAIDocx.Core\\MiniMaxAIDocx.Core.csproj": {
-              "projectPath": "C:\\Users\\tommy\\Documents\\Github\\simple-agent\\.claude\\skills\\minimax-docx\\scripts\\dotnet\\MiniMaxAIDocx.Core\\MiniMaxAIDocx.Core.csproj"
+            "c:\\Users\\tommy\\Documents\\Github\\simple-agent\\.claude\\skills\\minimax-docx\\scripts\\dotnet\\MiniMaxAIDocx.Core\\MiniMaxAIDocx.Core.csproj": {
+              "projectPath": "c:\\Users\\tommy\\Documents\\Github\\simple-agent\\.claude\\skills\\minimax-docx\\scripts\\dotnet\\MiniMaxAIDocx.Core\\MiniMaxAIDocx.Core.csproj"
             }
           }
         }
