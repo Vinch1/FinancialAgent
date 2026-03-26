@@ -1,0 +1,13 @@
+C:\Users\tommy\Documents\Github\simple-agent\.claude\skills\minimax-docx\scripts\dotnet\MiniMaxAIDocx.Core\bin\Debug\net8.0\MiniMaxAIDocx.Core.deps.json
+C:\Users\tommy\Documents\Github\simple-agent\.claude\skills\minimax-docx\scripts\dotnet\MiniMaxAIDocx.Core\bin\Debug\net8.0\MiniMaxAIDocx.Core.dll
+C:\Users\tommy\Documents\Github\simple-agent\.claude\skills\minimax-docx\scripts\dotnet\MiniMaxAIDocx.Core\bin\Debug\net8.0\MiniMaxAIDocx.Core.pdb
+C:\Users\tommy\Documents\Github\simple-agent\.claude\skills\minimax-docx\scripts\dotnet\MiniMaxAIDocx.Core\obj\Debug\net8.0\MiniMaxAIDocx.Core.csproj.AssemblyReference.cache
+C:\Users\tommy\Documents\Github\simple-agent\.claude\skills\minimax-docx\scripts\dotnet\MiniMaxAIDocx.Core\obj\Debug\net8.0\MiniMaxAIDocx.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\tommy\Documents\Github\simple-agent\.claude\skills\minimax-docx\scripts\dotnet\MiniMaxAIDocx.Core\obj\Debug\net8.0\MiniMaxAIDocx.Core.AssemblyInfoInputs.cache
+C:\Users\tommy\Documents\Github\simple-agent\.claude\skills\minimax-docx\scripts\dotnet\MiniMaxAIDocx.Core\obj\Debug\net8.0\MiniMaxAIDocx.Core.AssemblyInfo.cs
+C:\Users\tommy\Documents\Github\simple-agent\.claude\skills\minimax-docx\scripts\dotnet\MiniMaxAIDocx.Core\obj\Debug\net8.0\MiniMaxAIDocx.Core.csproj.CoreCompileInputs.cache
+C:\Users\tommy\Documents\Github\simple-agent\.claude\skills\minimax-docx\scripts\dotnet\MiniMaxAIDocx.Core\obj\Debug\net8.0\MiniMaxAIDocx.Core.sourcelink.json
+C:\Users\tommy\Documents\Github\simple-agent\.claude\skills\minimax-docx\scripts\dotnet\MiniMaxAIDocx.Core\obj\Debug\net8.0\MiniMaxAIDocx.Core.dll
+C:\Users\tommy\Documents\Github\simple-agent\.claude\skills\minimax-docx\scripts\dotnet\MiniMaxAIDocx.Core\obj\Debug\net8.0\refint\MiniMaxAIDocx.Core.dll
+C:\Users\tommy\Documents\Github\simple-agent\.claude\skills\minimax-docx\scripts\dotnet\MiniMaxAIDocx.Core\obj\Debug\net8.0\MiniMaxAIDocx.Core.pdb
+C:\Users\tommy\Documents\Github\simple-agent\.claude\skills\minimax-docx\scripts\dotnet\MiniMaxAIDocx.Core\obj\Debug\net8.0\ref\MiniMaxAIDocx.Core.dll

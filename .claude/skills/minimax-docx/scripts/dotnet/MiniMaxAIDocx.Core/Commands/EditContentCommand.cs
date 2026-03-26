@@ -263,18 +263,33 @@ public static class EditContentCommand
             var pattern = parseResult.GetValue(patternOpt)!;
 
             using var doc = WordprocessingDocument.Open(input, false);
-            var body = doc.MainDocumentPart?.Document.Body;
-            if (body == null) { Console.Error.WriteLine("No document body found."); return; }
+            var mainPart = doc.MainDocumentPart;
+            if (mainPart?.Document.Body == null) { Console.Error.WriteLine("No document body found."); return; }
 
             var placeholders = new HashSet<string>();
             var regex = new Regex(pattern);
 
-            foreach (var paragraph in body.Descendants<Paragraph>())
+            // Process body paragraphs
+            foreach (var paragraph in mainPart.Document.Body.Descendants<Paragraph>())
             {
-                var fullText = string.Concat(paragraph.Descendants<Text>().Select(t => t.Text));
-                foreach (Match match in regex.Matches(fullText))
+                CollectPlaceholders(paragraph, regex, placeholders);
+            }
+
+            // Process headers
+            foreach (var headerPart in mainPart.HeaderParts)
+            {
+                foreach (var paragraph in headerPart.Header.Descendants<Paragraph>())
                 {
-                    placeholders.Add(match.Value);
+                    CollectPlaceholders(paragraph, regex, placeholders);
+                }
+            }
+
+            // Process footers
+            foreach (var footerPart in mainPart.FooterParts)
+            {
+                foreach (var paragraph in footerPart.Footer.Descendants<Paragraph>())
+                {
+                    CollectPlaceholders(paragraph, regex, placeholders);
                 }
             }
 
@@ -290,6 +305,39 @@ public static class EditContentCommand
         });
 
         return cmd;
+    }
+
+    /// <summary>
+    /// Collects placeholders from a paragraph.
+    /// </summary>
+    private static void CollectPlaceholders(Paragraph paragraph, Regex regex, HashSet<string> placeholders)
+    {
+        var fullText = string.Concat(paragraph.Descendants<Text>().Select(t => t.Text));
+        foreach (Match match in regex.Matches(fullText))
+        {
+            placeholders.Add(match.Value);
+        }
+    }
+
+    /// <summary>
+    /// Fills placeholders in a paragraph using the provided mapping.
+    /// </summary>
+    private static int FillPlaceholdersInParagraph(Paragraph paragraph, Regex regex, Dictionary<string, string> mapping)
+    {
+        var fullText = string.Concat(paragraph.Descendants<Text>().Select(t => t.Text));
+        var matches = regex.Matches(fullText);
+        if (matches.Count == 0) return 0;
+
+        int count = 0;
+        foreach (Match match in matches)
+        {
+            var placeholderName = match.Groups.Count > 1 ? match.Groups[1].Value : match.Value;
+            if (mapping.TryGetValue(placeholderName, out var replacement))
+            {
+                count += ReplaceInParagraph(paragraph, match.Value, replacement, false);
+            }
+        }
+        return count;
     }
 
     private static Command CreateFillPlaceholdersCommand()
@@ -329,29 +377,39 @@ public static class EditContentCommand
             if (output != input) File.Copy(input, output, overwrite: true);
 
             using var doc = WordprocessingDocument.Open(output, true);
-            var body = doc.MainDocumentPart?.Document.Body;
-            if (body == null) { Console.Error.WriteLine("No document body found."); return; }
+            var mainPart = doc.MainDocumentPart;
+            if (mainPart?.Document.Body == null) { Console.Error.WriteLine("No document body found."); return; }
 
             int totalReplacements = 0;
             var regex = new Regex(pattern);
 
-            foreach (var paragraph in body.Descendants<Paragraph>())
+            // Process body paragraphs
+            foreach (var paragraph in mainPart.Document.Body.Descendants<Paragraph>())
             {
-                var fullText = string.Concat(paragraph.Descendants<Text>().Select(t => t.Text));
-                var matches = regex.Matches(fullText);
-                if (matches.Count == 0) continue;
-
-                foreach (Match match in matches)
-                {
-                    var placeholderName = match.Groups.Count > 1 ? match.Groups[1].Value : match.Value;
-                    if (mapping.TryGetValue(placeholderName, out var replacement))
-                    {
-                        totalReplacements += ReplaceInParagraph(paragraph, match.Value, replacement, false);
-                    }
-                }
+                totalReplacements += FillPlaceholdersInParagraph(paragraph, regex, mapping);
             }
 
-            doc.MainDocumentPart!.Document.Save();
+            // Process headers
+            foreach (var headerPart in mainPart.HeaderParts)
+            {
+                foreach (var paragraph in headerPart.Header.Descendants<Paragraph>())
+                {
+                    totalReplacements += FillPlaceholdersInParagraph(paragraph, regex, mapping);
+                }
+                headerPart.Header.Save();
+            }
+
+            // Process footers
+            foreach (var footerPart in mainPart.FooterParts)
+            {
+                foreach (var paragraph in footerPart.Footer.Descendants<Paragraph>())
+                {
+                    totalReplacements += FillPlaceholdersInParagraph(paragraph, regex, mapping);
+                }
+                footerPart.Footer.Save();
+            }
+
+            mainPart.Document.Save();
             Console.WriteLine($"Filled {totalReplacements} placeholder(s) in {output}");
         });
 
