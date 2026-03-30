@@ -1,6 +1,6 @@
 ---
 name: per-option-value
-description: Generate ESO (Employee Stock Option) valuation reports. Use this skill when the user needs to value employee stock options, calculate per-option values, or generate ESO valuation reports. 
+description: Generate ESO (Employee Stock Option) valuation reports. Use this skill when the user needs to value employee stock options, calculate per-option values, or generate ESO valuation reports.
 ---
 
 # Per-Option Value Calculator (John Hull ESO Model)
@@ -28,20 +28,33 @@ Collect parameters **one by one** in a conversational manner. Ask for one parame
 - Grant Date of the Subject
 - Maturity Date
 - Exercise Price
-- Vesting Date
 - Report Recipient (Employee / Director / Both)
-- Total No. of Share Options to Employees / Directors (for "Both" recipient, ask for both values separately)
+- **Multi-batch Check** (only if Report Recipient is Employee or Director):
+  - Ask: "Are there multiple Vesting Dates (batches) for this report? (yes/no)"
+  - If **yes** (multi-batch scenario):
+    - Ask for each batch's Vesting Date and No. of Share Options (loop until all batches are collected)
+    - Example: "Please provide the Vesting Date and No. of Share Options for Batch 1." → Wait for response → "Is there another batch? (yes/no)" → Continue until all batches are collected
+    - **Note:** Multi-batch is NOT available for "Both" recipient type
+  - If **no** (single-batch scenario):
+    - Ask for single Vesting Date
+    - Ask for Total No. of Share Options
+- **If Report Recipient is "Both"** (single-batch only):
+  - Ask for single Vesting Date
+  - Ask for Total No. of Share Options to Employees / Directors (ask for both values separately)
 - Spot Price (`--S`)
 - Strike Price (`--K`)
 - Volatility (`--V`) - Annual volatility (decimal)
 - Risk-free Rate (`--R`) - Annual risk-free rate (decimal)
 - Dividend Yield (`--Q`) - Annual dividend yield (decimal)
-- Post-vest Exit Rate (`--postVest`) - Annual exit rate after vesting (for "Both" recipient, ask for both values separately)
+- Post-vest Exit Rate (`--postVest`) - Annual exit rate after vesting
+  - For "Both" recipient: ask for both Employee and Director values separately
+  - For multi-batch: ask once (same value applies to all batches)
 - Exercise Multiple (`--exMult`) - Ask the user: "Would you like to use the default Exercise Multiple? (Default: 2.2 for Employee, 2.8 for Director)"
     - If yes: Use the default based on Report Recipient
-    - If no: Ask for the custom Exercise Multiple value for both Employee and Director.
+    - If no: Ask for the custom Exercise Multiple value
+    - For "Both" recipient: Ask for custom values for both Employee and Director
 
-**Date Format:** Use format "12 December 2023" (day month year) for all dates.
+**Date Format:** Use format "12 Dec 2023" (day month year) for all dates.
 
 **Default Values (do not ask):**
 - Pre-vest Exit Rate (`--preVest`): 0.0
@@ -78,14 +91,36 @@ If Report Recipient is "Both", you must run the calculation script **twice**:
 
 Keep both calculation results - you will pass them to the xlsx skill together so the report contains both values.
 
+**Important - Multi-batch Handling:**
+If there are multiple Vesting Dates (batches), you must run the calculation script **once per batch**:
+- Each batch has its own Time to Vest (`--vestTime`)
+- Each batch gets its own PerOptionValue result
+- All batches use the same Post-vest Exit Rate and other parameters (except vestTime)
+
+### Summary Table: Calculation Runs
+
+| Scenario | Calculation Runs | Template |
+|----------|------------------|----------|
+| Single recipient, single batch | 1 run | ESO template.xlsx |
+| Single recipient, multi-batch | N runs (N = number of batches) | ESO multi-batch.xlsx |
+| "Both" recipient | 2 runs (Employee + Director) | ESO template.xlsx |
+
 ## Step 2: Calculate Derived Parameters
 
-Calculate these values from the dates provided:
+Calculate these values by running the year fraction script from the dates provided:
 
 | Derived Parameter | Calculation |
 |-------------------|-------------|
-| Time to Maturity (`--T`) | Maturity Date - Valuation Date (in years) |
-| Time to Vest (`--vestTime`) | Vesting Date - Grant Date of the Subject (in years) |
+| Time to Maturity (`--T`) | Valuation Date - Maturity Date|
+| Time to Vest (`--vestTime`) | Vesting Date - Grant Date of the Subject|
+
+**For Time to Vest calculation, use the Python script:**
+Example command for single batch:
+```bash
+cd .claude/skills/per-option-value/scripts && uv run python calc_yearfrac.py --startdate "01 Nov 2024" --enddate "01 Jul 2027"
+```
+
+**For multi-batch:** Run the script for each Vesting Date to get each batch's Time to Vest.
 
 Show the user the calculated values before proceeding.
 
@@ -97,7 +132,7 @@ The script is bundled with this skill. Run it from the project root:
 bun .claude/skills/per-option-value/scripts/JohnHullESO.ts [options]
 ```
 
-### Example Usage
+### Example Usage (Single Batch)
 
 ```bash
 bun .claude/skills/per-option-value/scripts/JohnHullESO.ts \
@@ -113,19 +148,83 @@ bun .claude/skills/per-option-value/scripts/JohnHullESO.ts \
   --vestTime 2.0
 ```
 
-### Show help:
+### Example Usage (Multi-batch)
+
+For each batch, run the calculation with the batch's specific `--vestTime`:
+
 ```bash
-bun .claude/skills/per-option-value/scripts/JohnHullESO.ts --help
+# Batch 1
+bun .claude/skills/per-option-value/scripts/JohnHullESO.ts \
+  --S 50.0 \
+  --K 45.0 \
+  --T 5.0 \
+  --V 0.35 \
+  --R 0.04 \
+  --Q 0.02 \
+  --exMult 2.2 \
+  --preVest 0.0 \
+  --postVest 0.08 \
+  --vestTime 1.0
+
+# Batch 2
+bun .claude/skills/per-option-value/scripts/JohnHullESO.ts \
+  --S 50.0 \
+  --K 45.0 \
+  --T 5.0 \
+  --V 0.35 \
+  --R 0.04 \
+  --Q 0.02 \
+  --exMult 2.2 \
+  --preVest 0.0 \
+  --postVest 0.08 \
+  --vestTime 2.0
 ```
 
 ## Step 4: Generate the Report
 
-After the calculation completes, replace the placeholder values in the excel report template with all collected and calculated data.
-a placeholder look like this: `{{Valuation Date}}`, `{{Currency Unit}}`, `{{Maturity Date}}`, etc.
+After the calculation completes, replace the placeholder values in the excel report template with all collected and calculated data. A placeholder looks like this: `{{Valuation Date}}`, `{{Time to Vest1}}`, `{{Maturity Date}}`, etc.
+
+### Template Selection
+
+| Scenario | Template Location |
+|----------|-------------------|
+| Single batch (Employee/Director) | `.claude/skills/per-option-value/template/ESO template.xlsx` |
+| "Both" recipient | `.claude/skills/per-option-value/template/ESO template.xlsx` |
+| Multi-batch | `.claude/skills/per-option-value/template/ESO multi-batch.xlsx` |
+
+### Dynamic Column Handling for Multi-batch Reports
+
+The multi-batch template has a base structure with columns for a fixed number of batches. You must dynamically adjust the columns based on the actual number of batches:
+
+**Step 1: Determine the base number of batch columns in the template**
+- Open the template and identify how many batch columns exist (e.g., if E14~E19 contains Batch 3 placeholders, the template has 3 batch columns)
+
+**Step 2: Compare with actual batch count and adjust**
+
+| Condition | Action |
+|-----------|--------|
+| Actual batches < Template columns | **Delete unused columns** - Remove the excess batch columns (e.g., if 2 batches but template has 3 columns, delete the 3rd batch column) |
+| Actual batches = Template columns | No adjustment needed - Proceed with placeholder replacement |
+| Actual batches > Template columns | **Add new columns** - Copy the structure of the last batch column and insert new columns for additional batches |
+
+**Step 3: Column manipulation instructions for xlsx skill**
+
+When invoking the xlsx skill for multi-batch reports, explicitly instruct it to:
+
+1. **For deleting columns:** Specify which columns to remove (e.g., "Delete column E which contains Batch 3 placeholders")
+2. **For adding columns:** Specify to copy the last batch column's structure and insert it N times, then update placeholders accordingly
+
+**Example instruction to xlsx skill:**
+```
+This is a multi-batch report with 4 batches. The template has 3 batch columns.
+Please:
+1. Copy column E (Batch 3) structure
+2. Insert a new column after column E for Batch 4
+3. Update placeholders: {{Time to Vest3}} → {{Time to Vest4}}, {{No. of Share Options3}} → {{No. of Share Options4}}, etc.
+4. Fill all placeholders with the batch data provided
+```
 
 Invoke the **xlsx** skill from the project root and pass ALL of the following data explicitly:
-
-**Template Location:** `.claude/skills/template/ESO template.xlsx`
 
 **Report Information:**
 - Client Name
@@ -135,7 +234,7 @@ Invoke the **xlsx** skill from the project root and pass ALL of the following da
 - Grant Date of the Subject
 - Maturity Date
 - Exercise Price
-- Vesting Date
+- Vesting Date (single) OR List of Vesting Dates (multi-batch)
 - Report Recipient (Employee / Director / Both)
 
 **Calculation Parameters:**
@@ -147,17 +246,18 @@ Invoke the **xlsx** skill from the project root and pass ALL of the following da
 - Dividend Yield
 - Exercise Multiple (Custom or default based on recipient)
 - Pre-vest Exit Rate
-- Time to Vest
-- Post-vest Exit Rate for Employee / Director (if "Both" recipient)
+- Time to Vest (single) OR List of Time to Vest values (multi-batch)
+- Post-vest Exit Rate
 
-**Derived Values:**
-- Time to Maturity (years)
-- Time to Vest (years)
+**No. of Share Options:**
+- Single batch: Total No. of Share Options
+- Multi-batch: List of No. of Share Options per batch
+- "Both" recipient: Total No. of Share Options to Employees AND Total No. of Share Options to Directors
 
 **Calculated Results:**
-- If Employee: PerOptionValue from Employee exMult run
-- If Director: PerOptionValue from Director exMult run
-- If Both:
+- Single recipient, single batch: PerOptionValue
+- Single recipient, multi-batch: List of PerOptionValue per batch
+- "Both" recipient:
   - PerOptionValue_Employee: [result from Employee exMult run]
   - PerOptionValue_Director: [result from Director exMult run]
 
@@ -181,10 +281,18 @@ Collect the following additional information **one by one** in a conversational 
 **Asking order:**
 
 1. **Client Company Name** - The full legal name of the client company
-2. **Reference Number** - The reference number for this valuation engagement
-3. **use HKAS or IAS** - The Hong Kong/International Accounting Standard reference (e.g., "HKAS", "IAS")
-4. **use HKFRS or IFRS** - The Hong Kong/International Financial Reporting Standard reference (e.g., "HKFRS", "IFRS")
-5. **Client Address** - The client's registered address
+2. **Company Profile** - Automatically fetch company profile from HKEX
+   - Run the following script in the `.claude/skills/per-option-value/scripts/` directory:
+   ```bash
+   cd .claude/skills/per-option-value/scripts && uv run python hkex_crawler_scrapling.py --name "Client Company Name"
+   ```
+   - Replace `"Client Company Name"` with the actual company name collected in step 1
+   - The script returns the company profile description
+   - If the script fails or returns no result, ask the user to provide the company profile manually
+3. **Reference Number** - The reference number for this valuation engagement
+4. **use HKAS or IAS** - The Hong Kong/International Accounting Standard reference (e.g., "HKAS", "IAS")
+5. **use HKFRS or IFRS** - The Hong Kong/International Financial Reporting Standard reference (e.g., "HKFRS", "IFRS")
+6. **Client Address** - The client's registered address
    - **Important:** Inform the user: "Please use ',' to separate different parts of the address (e.g., 'Room 1001, 10/F, Tower A, ABC Building, 123 Queen's Road, Hong Kong')"
 
 **Pre-filled Data from Previous Steps:**
@@ -194,19 +302,27 @@ The following data is already collected in Step 1 and should be passed directly 
 - Valuation Subject
 - Valuation Date
 - Currency Unit
-- Total No. of Share Options to Employees / Directors (from Step 1)
+- Total No. of Share Options (from Step 1, or sum of all batches for multi-batch)
 - Grant Date of the Subject
 - Maturity Date
 - Exercise Price
 - Exercise Multiple (Custom or default based on recipient)
-- Vesting Date
+- Vesting Date(s) (single or multi-batch)
 - Spot Price, Strike Price, Volatility, Risk-free Rate, Dividend Yield
-- Time to Maturity, Time to Vest
+- Time to Maturity, Time to Vest(s)
 - Per-Option Value(s) from calculation
 
 **Compute Data**
-- TotalOptionValueEmployee = PerOptionValue_Employee * Total No. of Share Options to Employees
-- TotalOptionValueDirector = PerOptionValue_Director * Total No. of Share Options to Directors
+
+For single recipient (Employee or Director):
+- TotalOptionValue = PerOptionValue × Total No. of Share Options
+
+For multi-batch:
+- TotalOptionValue = Sum of (PerOptionValue_batch × No. of Share Options_batch) for all batches
+
+For "Both" recipient:
+- TotalOptionValueEmployee = PerOptionValue_Employee × Total No. of Share Options to Employees
+- TotalOptionValueDirector = PerOptionValue_Director × Total No. of Share Options to Directors
 - TotalOptionValue = TotalOptionValueEmployee + TotalOptionValueDirector
 - TotalNoOfShareOptions = Total No. of Share Options to Employees + Total No. of Share Options to Directors
 
@@ -230,17 +346,18 @@ The following data is already collected in Step 1 and should be passed directly 
 
 Invoke the **minimax-docx** skill to generate the DOCX report.
 
-** DOCX Report Template Location:** `.claude/skills/per-option-value/template/ESO_Report Template_v2.docx`
+**DOCX Report Template Location:** `.claude/skills/per-option-value/template/ESO_Report Template_v2.docx`
 
 If the template does not exist, inform the user and ask if they would like to proceed by creating a new document from scratch using the minimax-docx skill.
 
 **Placeholder Mapping:**
 
- JSON structure:
+JSON structure:
 
 ```json
 {
   "ClientCompanyName": "[from Step 6]",
+  "CompanyProfile": "[from Step 6 - fetched via hkex_crawler_scrapling.py]",
   "ReferenceNumber": "[from Step 6]",
   "HKAS_IAS": "[from Step 6]",
   "HKFRS_IFRS": "[from Step 6]",
@@ -278,6 +395,7 @@ If the template does not exist, inform the user and ask if they would like to pr
   "CurrencyUnitDesc": "[conditional based on CurrencyUnit value]"
 }
 ```
+
 Create a temporary mapping.json file first and always use dotnet CLI to run the minimax-docx skill. Use the `fill-placeholders` command with '--mapping' mapping.json file. Forbit using Python.
 
 **CLI Command Example:**
@@ -285,8 +403,8 @@ Create a temporary mapping.json file first and always use dotnet CLI to run the 
 ```bash
 dotnet run --project .claude/skills/minimax-docx/scripts/dotnet/MiniMaxAIDocx.Cli -- \
   edit fill-placeholders \
-  --input .claude/skills/per-option-value/template/ESO_Report Template_v2.docx \
-  --output .claude/skills/per-option-value/reports/ESO_Valuation_Report_[ClientCompanyName]_DOCX.docx \
+  --input ".claude/skills/per-option-value/template/ESO_Report Template_v2.docx" \
+  --output ".claude/skills/per-option-value/reports/ESO_Valuation_Report_[ClientCompanyName]_DOCX.docx" \
   --mapping ./mapping.json
 ```
 

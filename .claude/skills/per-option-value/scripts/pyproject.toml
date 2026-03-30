@@ -6,5 +6,6 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "scrapling[fetchers]>=0.4.0",
+    "yearfrac>=0.4.8",
     "yfinance>=0.2.66",
 ]
