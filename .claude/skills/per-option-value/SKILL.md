@@ -114,10 +114,14 @@ Calculate these values by running the year fraction script from the dates provid
 | Time to Maturity (`--T`) | Valuation Date - Maturity Date|
 | Time to Vest (`--vestTime`) | Vesting Date - Grant Date of the Subject|
 
-**For Time to Vest calculation, use the Python script:**
-Example command for single batch:
+**For Time to Vest calculation, use the Python script from the project root:**
+
+**Important:** All commands should be run from the **project root directory** (where `.claude/` folder is located).
+
+Example commands for single batch:
 ```bash
-cd .claude/skills/per-option-value/scripts && uv run python calc_yearfrac.py --startdate "01 Nov 2024" --enddate "01 Jul 2027"
+cd .claude/skills/per-option-value/scripts
+uv run python calc_yearfrac.py --startdate "01 Nov 2024" --enddate "01 Jul 2027"
 ```
 
 **For multi-batch:** Run the script for each Vesting Date to get each batch's Time to Vest.
@@ -127,15 +131,16 @@ Show the user the calculated values before proceeding.
 ## Step 3: Run the Calculation to get PerOptionValue
 
 The script is bundled with this skill. Run it from the project root:
-
+first, navigate to scripts directory, then run the calculation script with the collected parameters:
 ```bash
-bun .claude/skills/per-option-value/scripts/JohnHullESO.ts [options]
+cd .claude/skills/per-option-value/scripts
+bun JohnHullESO.ts [options]
 ```
 
 ### Example Usage (Single Batch)
 
 ```bash
-bun .claude/skills/per-option-value/scripts/JohnHullESO.ts \
+bun JohnHullESO.ts \
   --S 50.0 \
   --K 45.0 \
   --T 5.0 \
@@ -154,7 +159,7 @@ For each batch, run the calculation with the batch's specific `--vestTime`:
 
 ```bash
 # Batch 1
-bun .claude/skills/per-option-value/scripts/JohnHullESO.ts \
+bun JohnHullESO.ts \
   --S 50.0 \
   --K 45.0 \
   --T 5.0 \
@@ -167,7 +172,7 @@ bun .claude/skills/per-option-value/scripts/JohnHullESO.ts \
   --vestTime 1.0
 
 # Batch 2
-bun .claude/skills/per-option-value/scripts/JohnHullESO.ts \
+bun JohnHullESO.ts \
   --S 50.0 \
   --K 45.0 \
   --T 5.0 \
@@ -216,13 +221,15 @@ When invoking the xlsx skill for multi-batch reports, explicitly instruct it to:
 
 **Example instruction to xlsx skill:**
 ```
-This is a multi-batch report with 4 batches. The template has 3 batch columns.
+This is a multi-batch report with 3 batches. The template has 2 batch columns.
 Please:
-1. Copy column E (Batch 3) structure
-2. Insert a new column after column E for Batch 4
-3. Update placeholders: {{Time to Vest3}} → {{Time to Vest4}}, {{No. of Share Options3}} → {{No. of Share Options4}}, etc.
+1. Copy Entire column D (Batch 2) structure, including **cell background color** 
+2. Insert a new column after column D for Batch 3
+3. Update placeholders: {{Time to Vest2}} → {{Time to Vest3}}, {{No. of Share Options2}} → {{No. of Share Options3}}, "=D27/D17" → "=E27/E17", etc.
 4. Fill all placeholders with the batch data provided
 ```
+
+**Note:** When adding a new column, make sure also to copy the cell's background color.
 
 Invoke the **xlsx** skill from the project root and pass ALL of the following data explicitly:
 
@@ -282,14 +289,13 @@ Collect the following additional information **one by one** in a conversational 
 
 1. **Client Company Name** - The full legal name of the client company
 2. **Company Profile** - Automatically fetch company profile from HKEX
-   - Run the following script in the `.claude/skills/per-option-value/scripts/` directory:
+   - Run the following script from the **project root directory**:
    ```bash
-   cd .claude/skills/per-option-value/scripts && uv run python hkex_crawler_scrapling.py --name "Client Company Name"
+   uv run python .claude/skills/per-option-value/scripts/hkex_crawler_scrapling.py --name "Client Company Name"
    ```
    - Replace `"Client Company Name"` with the actual company name collected in step 1
-   - The script returns the company profile description
    - If the script fails or returns no result, ask the user to provide the company profile manually
-3. **Reference Number** - The reference number for this valuation engagement
+3. **Reference Number** - the reference number for this valuation engagement
 4. **use HKAS or IAS** - The Hong Kong/International Accounting Standard reference (e.g., "HKAS", "IAS")
 5. **use HKFRS or IFRS** - The Hong Kong/International Financial Reporting Standard reference (e.g., "HKFRS", "IFRS")
 6. **Client Address** - The client's registered address
@@ -373,16 +379,16 @@ JSON structure:
   "GrantDate": "[from Step 1]",
   "MaturityDate": "[from Step 1]",
   "ExercisePrice": "[from Step 1]",
-  "VestingDate": "[from Step 1]",
+  "VestingDate": "[from Step 1 - single date, or comma-separated for multi-batch]",
   "SpotPrice": "[from Step 1]",
   "StrikePrice": "[from Step 1]",
   "Volatility": "[from Step 1]",
   "RiskFreeRate": "[from Step 1]",
   "DividendYield": "[from Step 1]",
   "TimeToMaturity": "[from Step 2]",
-  "TimeToVest": "[from Step 2]",
-  "PerOptionValue_Employee": "[from Step 3, if applicable]",
-  "PerOptionValue_Director": "[from Step 3, if applicable]",
+  "TimeToVest": "[from Step 2 - single value, or comma-separated for multi-batch]",
+  "PerOptionValue_Employee": "[from Step 3, if applicable - single or comma-separated for multi-batch]",
+  "PerOptionValue_Director": "[from Step 3, if applicable - single or comma-separated for multi-batch]",
   "DateOfReport": "[Date of Report]",
   "TotalOptionValueEmployee": "[computed value]",
   "TotalOptionValueDirector": "[computed value]",
@@ -395,6 +401,19 @@ JSON structure:
   "CurrencyUnitDesc": "[conditional based on CurrencyUnit value]"
 }
 ```
+
+**Multi-batch Placeholder Handling:**
+
+For multi-batch reports, certain placeholders can contain multiple values. Format them as follows:
+
+| Placeholder | Single Batch Format | Multi-batch Format |
+|-------------|---------------------|-------------------|
+| VestingDate | `"01 Jan 2025"` | `"01 Jan 2025, 01 Jan 2026, 01 Jan 2027"` |
+| TimeToVest | `"2.0"` | `"1.0, 2.0, 3.0"` |
+| PerOptionValue_Employee | `"12.3456"` | `"12.3456, 11.2345, 10.1234"` |
+| PerOptionValue_Director | `"15.6789"` | `"15.6789, 14.5678, 13.4567"` |
+
+**Note:** For multi-batch, the DOCX template should have placeholders structured to handle multiple values (e.g., separate placeholders like `{{VestingDate1}}`, `{{VestingDate2}}`, etc., or a single placeholder that accepts comma-separated values).
 
 Create a temporary mapping.json file first and always use dotnet CLI to run the minimax-docx skill. Use the `fill-placeholders` command with '--mapping' mapping.json file. Forbit using Python.
 
