@@ -10,3 +10,8 @@ dependencies = [
     "yearfrac>=0.4.8",
     "yfinance>=0.2.66",
 ]
+
+[dependency-groups]
+dev = [
+    "scrapling[fetchers]>=0.4.2",
+]

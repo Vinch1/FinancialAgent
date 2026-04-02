@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "AmmB69VdhZM=",
+  "dgSpecHash": "Yqz+qciK5ZI=",
   "success": true,
-  "projectFilePath": "c:\\Users\\tommy\\Documents\\Github\\simple-agent\\.claude\\skills\\minimax-docx\\scripts\\dotnet\\MiniMaxAIDocx.Core\\MiniMaxAIDocx.Core.csproj",
+  "projectFilePath": "C:\\Users\\tommy\\Documents\\Github\\simple-agent\\.claude\\skills\\minimax-docx\\scripts\\dotnet\\MiniMaxAIDocx.Core\\MiniMaxAIDocx.Core.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\tommy\\.nuget\\packages\\documentformat.openxml\\3.5.1\\documentformat.openxml.3.5.1.nupkg.sha512",
     "C:\\Users\\tommy\\.nuget\\packages\\documentformat.openxml.framework\\3.5.1\\documentformat.openxml.framework.3.5.1.nupkg.sha512",

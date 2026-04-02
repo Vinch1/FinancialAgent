@@ -120,7 +120,6 @@ Calculate these values by running the year fraction script from the dates provid
 
 Example commands for single batch:
 ```bash
-cd .claude/skills/per-option-value/scripts
 uv run python calc_yearfrac.py --startdate "01 Nov 2024" --enddate "01 Jul 2027"
 ```
 
@@ -133,7 +132,6 @@ Show the user the calculated values before proceeding.
 The script is bundled with this skill. Run it from the project root:
 first, navigate to scripts directory, then run the calculation script with the collected parameters:
 ```bash
-cd .claude/skills/per-option-value/scripts
 bun JohnHullESO.ts [options]
 ```
 
@@ -189,7 +187,7 @@ bun JohnHullESO.ts \
 
 After the calculation completes, replace the placeholder values in the excel report template with all collected and calculated data. A placeholder looks like this: `{{Valuation Date}}`, `{{Time to Vest1}}`, `{{Maturity Date}}`, etc.
 
-### Template Selection
+### Excel Template Selection
 
 | Scenario | Template Location |
 |----------|-------------------|
@@ -324,7 +322,8 @@ For single recipient (Employee or Director):
 - TotalOptionValue = PerOptionValue × Total No. of Share Options
 
 For multi-batch:
-- TotalOptionValue = Sum of (PerOptionValue_batch × No. of Share Options_batch) for all batches
+- TotalOptionValue_batch = one PerOptionValue_batch × one No. of Share Options_batch
+- TotalOptionValue = Sum of (TotalOptionValue_batch) for all batches
 
 For "Both" recipient:
 - TotalOptionValueEmployee = PerOptionValue_Employee × Total No. of Share Options to Employees
@@ -352,11 +351,106 @@ For "Both" recipient:
 
 Invoke the **minimax-docx** skill to generate the DOCX report.
 
-**DOCX Report Template Location:** `.claude/skills/per-option-value/template/ESO_Report Template_v2.docx`
+### Template Selection
+
+| Scenario | Template Location |
+|----------|-------------------|
+| Single batch (Employee/Director) | `.claude/skills/per-option-value/template/ESO_Report Template_v2.docx` |
+| "Both" recipient | `.claude/skills/per-option-value/template/ESO_Report Template_v2.docx` |
+| Multi-batch (Employee or Director only) | `.claude/skills/per-option-value/template/ESO_Report multi-batch.docx` |
 
 If the template does not exist, inform the user and ask if they would like to proceed by creating a new document from scratch using the minimax-docx skill.
 
-**Placeholder Mapping:**
+---
+
+### Workflow A: Single Batch / "Both" Recipient
+
+For single batch or "Both" recipient reports, use `fill-placeholders` directly on the template:
+
+```bash
+dotnet run --project .claude/skills/minimax-docx/scripts/dotnet/MiniMaxAIDocx.Cli -- \
+  edit fill-placeholders \
+  --input ".claude/skills/per-option-value/template/ESO_Report Template_v2.docx" \
+  --output ".claude/skills/per-option-value/reports/ESO_Valuation_Report_[ClientCompanyName]_DOCX.docx" \
+  --mapping ./mapping.json
+```
+
+**Workflow A Summary:**
+```
+Template → fill-placeholders (replace all {{...}}) → Final report
+```
+
+---
+
+### Workflow B: Multi-batch (Employee or Director Only)
+
+For multi-batch reports, the DOCX template contains an empty table in Section 10 (OPINION OF VALUE) that must be filled with batch data **before** running `fill-placeholders`.
+
+**Workflow B Summary:**
+```
+Copy template → fill-table (add data rows) → fill-placeholders (replace all {{...}}) → Final report
+```
+
+#### Step B1: Copy Template to Output Location
+
+```bash
+cp ".claude/skills/per-option-value/template/ESO_Report multi-batch.docx" \
+   ".claude/skills/per-option-value/reports/ESO_Valuation_Report_[ClientCompanyName]_DOCX.docx"
+```
+
+#### Step B2: Fill the Table
+
+The table in Section 10 has the following structure:
+
+| Valuation Date | Vesting Date | Per Option Value | Total Option Value |
+|----------------|--------------|------------------|-------------------|
+| {{ValuationDate}} | VestingDate_1 | PerOptionValue_1 | TotalOptionValue_1 |
+| {{ValuationDate}} | VestingDate_2 | PerOptionValue_2 | TotalOptionValue_2 |
+| ... | ... | ... | ... |
+| Total | | | {{TotalOptionValue}} |
+
+Generate a CSV file (e.g., `table_data.csv`) with header and the batch data to fill this table.
+
+**Row Details:**
+- Row 1: Header row (Valuation Date, Vesting Date, Per Option Value, Total Option Value)
+- Row 2 to N: Each batch's data row
+  - Column 1: `{{ValuationDate}}` (same for all rows, will be replaced by fill-placeholders later)
+  - Column 2: The batch's Vesting Date
+  - Column 3: The batch's Per Option Value (from calculation)
+  - Column 4: The batch's Total Option Value (PerOptionValue × NoOfShareOptions for that batch)
+- Last row: `["Total", "", "", "{{TotalOptionValue}}"]`
+
+**Fill Table Command:**
+first determine the table index of the target table in the DOCX template (e.g., if it's the 5th table, then `--table-index 5`), then run:
+```bash
+dotnet run --project .claude/skills/minimax-docx/scripts/dotnet/MiniMaxAIDocx.Cli -- \
+  edit fill-table \
+  --input ".claude/skills/per-option-value/reports/ESO_Valuation_Report_[ClientCompanyName]_DOCX.docx" \
+  --output ".claude/skills/per-option-value/reports/ESO_Valuation_Report_[ClientCompanyName]_DOCX.docx" \
+  --table-index 5 \
+  --csv table_data.csv
+```
+
+#### Step B3: Fill Remaining Placeholders
+
+After filling the table, run `fill-placeholders` on the same output file:
+
+```bash
+dotnet run --project .claude/skills/minimax-docx/scripts/dotnet/MiniMaxAIDocx.Cli -- \
+  edit fill-placeholders \
+  --input ".claude/skills/per-option-value/reports/ESO_Valuation_Report_[ClientCompanyName]_DOCX.docx" \
+  --output ".claude/skills/per-option-value/reports/ESO_Valuation_Report_[ClientCompanyName]_DOCX.docx" \
+  --mapping ./mapping.json
+```
+
+**Important Notes for Multi-batch Table:**
+- The Valuation Date column uses `{{ValuationDate}}` placeholder so it gets replaced in the fill-placeholders step
+- The Total row's Total Option Value uses `{{TotalOptionValue}}` placeholder so it gets replaced in the fill-placeholders step
+- All currency formatting (e.g., "HKD") should be applied in the fill-placeholders step, not in the table data
+
+---
+
+### Placeholder Mapping
 
 JSON structure:
 
@@ -373,8 +467,8 @@ JSON structure:
   "ValuationDate": "[from Step 1]",
   "TotalNoOfShareOptionstoEmployees": "[from Step 1]",
   "TotalNoOfShareOptionstoDirectors": "[from Step 1]",
-  "ExerciseMultipleforEmployee": "[from Step 1 or default]",
-  "ExerciseMultipleforDirector": "[from Step 1 or default]",
+  "ExerciseMultipleforEmployee": "[from Step 1 or default] if not applicable, set to ' '",
+  "ExerciseMultipleforDirector": "[from Step 1 or default] if not applicable, set to ' '",
   "CurrencyUnit": "[from Step 1]",
   "GrantDate": "[from Step 1]",
   "MaturityDate": "[from Step 1]",
@@ -413,7 +507,6 @@ For multi-batch reports, certain placeholders can contain multiple values. Forma
 | PerOptionValue_Employee | `"12.3456"` | `"12.3456, 11.2345, 10.1234"` |
 | PerOptionValue_Director | `"15.6789"` | `"15.6789, 14.5678, 13.4567"` |
 
-**Note:** For multi-batch, the DOCX template should have placeholders structured to handle multiple values (e.g., separate placeholders like `{{VestingDate1}}`, `{{VestingDate2}}`, etc., or a single placeholder that accepts comma-separated values).
 
 Create a temporary mapping.json file first and always use dotnet CLI to run the minimax-docx skill. Use the `fill-placeholders` command with '--mapping' mapping.json file. Forbit using Python.
 
@@ -429,4 +522,4 @@ dotnet run --project .claude/skills/minimax-docx/scripts/dotnet/MiniMaxAIDocx.Cl
 
 **Report filename should follow the format:** `ESO_Valuation_Report_[ClientCompanyName]_DOCX.docx`
 
-Save the completed DOCX report to ".claude/skills/per-option-value/reports/" and provide the file path to the user.
+Inform user once the DOCX report is generated and saved.

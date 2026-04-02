@@ -3,6 +3,10 @@
     "allow": [
       "WebSearch",
       "Bash"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\tommy\\Documents\\Github\\simple-agent\\.claude\\skills\\per-option-value\\template",
+      "C:\\Users\\tommy\\Documents\\Github\\simple-agent\\.claude\\skills\\per-option-value\\scripts"
     ]
   },
   "hooks": {
