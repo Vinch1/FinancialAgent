@@ -114,13 +114,13 @@ Calculate these values by running the year fraction script from the dates provid
 | Time to Maturity (`--T`) | Valuation Date - Maturity Date|
 | Time to Vest (`--vestTime`) | Vesting Date - Grant Date of the Subject|
 
-**For Time to Vest calculation, use the Python script from the project root:**
+**For Time to Vest calculation, use the Python script:**
 
-**Important:** All commands should be run from the **project root directory** (where `.claude/` folder is located).
+**Important:** For `uv run` commands, first `cd` to `.claude/skills/per-option-value/`, run the script, then `cd -` back to project root. All other commands (bun, dotnet, cp) run from project root.
 
 Example commands for single batch:
 ```bash
-uv run python calc_yearfrac.py --startdate "01 Nov 2024" --enddate "01 Jul 2027"
+cd .claude/skills/per-option-value/ && uv run python scripts/calc_yearfrac.py --startdate "01 Nov 2024" --enddate "01 Jul 2027" && cd -
 ```
 
 **For multi-batch:** Run the script for each Vesting Date to get each batch's Time to Vest.
@@ -129,16 +129,15 @@ Show the user the calculated values before proceeding.
 
 ## Step 3: Run the Calculation to get PerOptionValue
 
-The script is bundled with this skill. Run it from the project root:
-first, navigate to scripts directory, then run the calculation script with the collected parameters:
+The script is bundled with this skill. Run from the **project root directory** with full path:
 ```bash
-bun JohnHullESO.ts [options]
+bun .claude/skills/per-option-value/scripts/JohnHullESO.ts [options]
 ```
 
 ### Example Usage (Single Batch)
 
 ```bash
-bun JohnHullESO.ts \
+bun .claude/skills/per-option-value/scripts/JohnHullESO.ts \
   --S 50.0 \
   --K 45.0 \
   --T 5.0 \
@@ -157,7 +156,7 @@ For each batch, run the calculation with the batch's specific `--vestTime`:
 
 ```bash
 # Batch 1
-bun JohnHullESO.ts \
+bun .claude/skills/per-option-value/scripts/JohnHullESO.ts \
   --S 50.0 \
   --K 45.0 \
   --T 5.0 \
@@ -170,7 +169,7 @@ bun JohnHullESO.ts \
   --vestTime 1.0
 
 # Batch 2
-bun JohnHullESO.ts \
+bun .claude/skills/per-option-value/scripts/JohnHullESO.ts \
   --S 50.0 \
   --K 45.0 \
   --T 5.0 \
@@ -287,9 +286,9 @@ Collect the following additional information **one by one** in a conversational 
 
 1. **Client Company Name** - The full legal name of the client company
 2. **Company Profile** - Automatically fetch company profile from HKEX
-   - Run the following script from the **project root directory**:
+   - Run the following script (cd to skill folder first, then cd back):
    ```bash
-   uv run python .claude/skills/per-option-value/scripts/hkex_crawler_scrapling.py --name "Client Company Name"
+   cd .claude/skills/per-option-value/ && uv run python scripts/hkex_crawler_scrapling.py --name "Client Company Name" && cd -
    ```
    - Replace `"Client Company Name"` with the actual company name collected in step 1
    - If the script fails or returns no result, ask the user to provide the company profile manually
