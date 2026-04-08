@@ -1,0 +1,13 @@
+/Users/aimpactaccelerator/Documents/Projects/FinancialAgent/.claude/skills/minimax-docx/scripts/dotnet/MiniMaxAIDocx.Core/bin/Debug/net10.0/MiniMaxAIDocx.Core.deps.json
+/Users/aimpactaccelerator/Documents/Projects/FinancialAgent/.claude/skills/minimax-docx/scripts/dotnet/MiniMaxAIDocx.Core/bin/Debug/net10.0/MiniMaxAIDocx.Core.dll
+/Users/aimpactaccelerator/Documents/Projects/FinancialAgent/.claude/skills/minimax-docx/scripts/dotnet/MiniMaxAIDocx.Core/bin/Debug/net10.0/MiniMaxAIDocx.Core.pdb
+/Users/aimpactaccelerator/Documents/Projects/FinancialAgent/.claude/skills/minimax-docx/scripts/dotnet/MiniMaxAIDocx.Core/obj/Debug/net10.0/MiniMaxAIDocx.Core.csproj.AssemblyReference.cache
+/Users/aimpactaccelerator/Documents/Projects/FinancialAgent/.claude/skills/minimax-docx/scripts/dotnet/MiniMaxAIDocx.Core/obj/Debug/net10.0/MiniMaxAIDocx.Core.GeneratedMSBuildEditorConfig.editorconfig
+/Users/aimpactaccelerator/Documents/Projects/FinancialAgent/.claude/skills/minimax-docx/scripts/dotnet/MiniMaxAIDocx.Core/obj/Debug/net10.0/MiniMaxAIDocx.Core.AssemblyInfoInputs.cache
+/Users/aimpactaccelerator/Documents/Projects/FinancialAgent/.claude/skills/minimax-docx/scripts/dotnet/MiniMaxAIDocx.Core/obj/Debug/net10.0/MiniMaxAIDocx.Core.AssemblyInfo.cs
+/Users/aimpactaccelerator/Documents/Projects/FinancialAgent/.claude/skills/minimax-docx/scripts/dotnet/MiniMaxAIDocx.Core/obj/Debug/net10.0/MiniMaxAIDocx.Core.csproj.CoreCompileInputs.cache
+/Users/aimpactaccelerator/Documents/Projects/FinancialAgent/.claude/skills/minimax-docx/scripts/dotnet/MiniMaxAIDocx.Core/obj/Debug/net10.0/MiniMaxAIDocx.Core.sourcelink.json
+/Users/aimpactaccelerator/Documents/Projects/FinancialAgent/.claude/skills/minimax-docx/scripts/dotnet/MiniMaxAIDocx.Core/obj/Debug/net10.0/MiniMaxAIDocx.Core.dll
+/Users/aimpactaccelerator/Documents/Projects/FinancialAgent/.claude/skills/minimax-docx/scripts/dotnet/MiniMaxAIDocx.Core/obj/Debug/net10.0/refint/MiniMaxAIDocx.Core.dll
+/Users/aimpactaccelerator/Documents/Projects/FinancialAgent/.claude/skills/minimax-docx/scripts/dotnet/MiniMaxAIDocx.Core/obj/Debug/net10.0/MiniMaxAIDocx.Core.pdb
+/Users/aimpactaccelerator/Documents/Projects/FinancialAgent/.claude/skills/minimax-docx/scripts/dotnet/MiniMaxAIDocx.Core/obj/Debug/net10.0/ref/MiniMaxAIDocx.Core.dll

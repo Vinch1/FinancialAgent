@@ -420,7 +420,7 @@ Generate a CSV file (e.g., `table_data.csv`) with header and the batch data to f
 - Last row: `["Total", "", "", "{{TotalOptionValue}}"]`
 
 **Fill Table Command:**
-first determine the table index of the target table in the DOCX template (e.g., if it's the 5th table, then `--table-index 5`), then run:
+usually the table index of the target table in the DOCX template is 5, then `--table-index 5`, then run:
 ```bash
 dotnet run --project .claude/skills/minimax-docx/scripts/dotnet/MiniMaxAIDocx.Cli -- \
   edit fill-table \
