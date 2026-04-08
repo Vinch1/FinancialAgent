@@ -297,6 +297,7 @@ Collect the following additional information **one by one** in a conversational 
 5. **use HKFRS or IFRS** - The Hong Kong/International Financial Reporting Standard reference (e.g., "HKFRS", "IFRS")
 6. **Client Address** - The client's registered address
    - **Important:** Inform the user: "Please use ',' to separate different parts of the address (e.g., 'Room 1001, 10/F, Tower A, ABC Building, 123 Queen's Road, Hong Kong')"
+   - **Note:** When building the mapping.json, replace all ',' with '\n' in the ClientAddress value so each part displays on its own line in the DOCX (e.g., "Room 1001, 10/F, Tower A" → "Room 1001\n10/F\nTower A")
 
 **Pre-filled Data from Previous Steps:**
 
@@ -460,7 +461,7 @@ JSON structure:
   "ReferenceNumber": "[from Step 6]",
   "HKAS_IAS": "[from Step 6]",
   "HKFRS_IFRS": "[from Step 6]",
-  "ClientAddress": "[from Step 6]",
+  "ClientAddress": "[from Step 6 - replace ',' with '\\n' for line breaks]",
   "ClientName": "[from Step 1]",
   "ValuationSubject": "[from Step 1]",
   "ValuationDate": "[from Step 1]",

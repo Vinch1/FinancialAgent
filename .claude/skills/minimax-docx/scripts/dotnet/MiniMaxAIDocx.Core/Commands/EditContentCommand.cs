@@ -443,9 +443,31 @@ public static class EditContentCommand
                         var newText = textElement.Text.Replace(search, replace);
                         count += (textElement.Text.Length - newText.Length + replace.Length - search.Length) == 0 ? 0 :
                                  CountOccurrences(textElement.Text, search);
-                        textElement.Text = newText;
-                        if (newText.StartsWith(' ') || newText.EndsWith(' '))
-                            textElement.Space = SpaceProcessingModeValues.Preserve;
+                        // Handle newlines: replace text element with text+break sequence
+                        if (newText.Contains('\n'))
+                        {
+                            var parentRun = textElement.Parent as Run;
+                            if (parentRun != null)
+                            {
+                                textElement.Remove();
+                                var parts = newText.Split('\n');
+                                for (int i = 0; i < parts.Length; i++)
+                                {
+                                    if (i > 0)
+                                        parentRun.AppendChild(new Break());
+                                    var te = new Text(parts[i]);
+                                    if (parts[i].StartsWith(' ') || parts[i].EndsWith(' '))
+                                        te.Space = SpaceProcessingModeValues.Preserve;
+                                    parentRun.AppendChild(te);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            textElement.Text = newText;
+                            if (newText.StartsWith(' ') || newText.EndsWith(' '))
+                                textElement.Space = SpaceProcessingModeValues.Preserve;
+                        }
                     }
                 }
             }
@@ -482,17 +504,36 @@ public static class EditContentCommand
 
         // Keep the first run's formatting, set its text to the full new text
         var firstRun = runs[0];
-        var firstText = firstRun.Elements<Text>().FirstOrDefault();
-        if (firstText != null)
-        {
-            firstText.Text = newText;
-            if (newText.StartsWith(' ') || newText.EndsWith(' '))
-                firstText.Space = SpaceProcessingModeValues.Preserve;
-        }
 
-        // Remove all other runs
+        // Remove all other runs first
         for (int i = 1; i < runs.Count; i++)
             runs[i].Remove();
+
+        // Remove existing text elements from first run
+        foreach (var t in firstRun.Elements<Text>().ToList())
+            t.Remove();
+
+        // Handle newlines by splitting and inserting <w:br/> elements
+        if (newText.Contains('\n'))
+        {
+            var parts = newText.Split('\n');
+            for (int i = 0; i < parts.Length; i++)
+            {
+                if (i > 0)
+                    firstRun.AppendChild(new Break());
+                var textElem = new Text(parts[i]);
+                if (parts[i].StartsWith(' ') || parts[i].EndsWith(' '))
+                    textElem.Space = SpaceProcessingModeValues.Preserve;
+                firstRun.AppendChild(textElem);
+            }
+        }
+        else
+        {
+            var firstText = new Text(newText);
+            if (newText.StartsWith(' ') || newText.EndsWith(' '))
+                firstText.Space = SpaceProcessingModeValues.Preserve;
+            firstRun.AppendChild(firstText);
+        }
     }
 
     private static int CountOccurrences(string text, string search)
