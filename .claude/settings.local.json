@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "WebSearch",
-      "Bash"
+      "Bash",
+      "Bash(rm -rf /Users/aimpactaccelerator/.claude/plugins/cache/minimax-skills/minimax-skills/1.0.0/skills/minimax-docx/scripts/dotnet/MiniMaxAIDocx.Cli/bin /Users/aimpactaccelerator/.claude/plugins/cache/minimax-skills/minimax-skills/1.0.0/skills/minimax-docx/scripts/dotnet/MiniMaxAIDocx.Cli/obj)",
+      "Bash(dotnet run:*)"
     ],
     "additionalDirectories": [
       "C:\\Users\\tommy\\Documents\\Github\\simple-agent\\.claude\\skills\\per-option-value\\template",

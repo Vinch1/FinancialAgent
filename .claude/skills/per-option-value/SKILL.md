@@ -469,6 +469,8 @@ JSON structure:
   "TotalNoOfShareOptionstoDirectors": "[from Step 1]",
   "ExerciseMultipleforEmployee": "[from Step 1 or default] if not applicable, set to ' '",
   "ExerciseMultipleforDirector": "[from Step 1 or default] if not applicable, set to ' '",
+  "Post-vestingExitRateEmployee": "[from Step 1 or default, format as 'x.x for Employee'] if not applicable, set to ' '",
+  "Post-vestingExitRateDirector": "[from Step 1 or default, format as 'x.x for Director'] if not applicable, set to ' '",
   "CurrencyUnit": "[from Step 1]",
   "GrantDate": "[from Step 1]",
   "MaturityDate": "[from Step 1]",
