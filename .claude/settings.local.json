@@ -2,6 +2,7 @@
   "permissions": {
     "allow": [
       "WebSearch",
+      "pwd",
       "Bash",
       "Bash(rm -rf /Users/aimpactaccelerator/.claude/plugins/cache/minimax-skills/minimax-skills/1.0.0/skills/minimax-docx/scripts/dotnet/MiniMaxAIDocx.Cli/bin /Users/aimpactaccelerator/.claude/plugins/cache/minimax-skills/minimax-skills/1.0.0/skills/minimax-docx/scripts/dotnet/MiniMaxAIDocx.Cli/obj)",
       "Bash(dotnet run:*)"
@@ -9,20 +10,6 @@
     "additionalDirectories": [
       "C:\\Users\\tommy\\Documents\\Github\\simple-agent\\.claude\\skills\\per-option-value\\template",
       "C:\\Users\\tommy\\Documents\\Github\\simple-agent\\.claude\\skills\\per-option-value\\scripts"
-    ]
-  },
-  "hooks": {
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/load_plan.sh",
-            "timeout": 5,
-            "statusMessage": "Loading plan.md..."
-          }
-        ]
-      }
     ]
   }
 }

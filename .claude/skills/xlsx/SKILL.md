@@ -70,7 +70,12 @@ A user may ask you to create, edit, or analyze the contents of an .xlsx file. Yo
 
 ## Important Requirements
 
-**LibreOffice Required for Formula Recalculation**: You can assume LibreOffice is installed for recalculating formula values using the `scripts/recalc.py` script. The script automatically configures LibreOffice on first run, including in sandboxed environments where Unix sockets are restricted (handled by `scripts/office/soffice.py`)
+**Use `python3` directly** — openpyxl is available via the system python3. Do NOT use `uv run`. Run Python scripts with `python3` directly:
+```bash
+python3 script.py
+```
+
+**Formulas recalculate on open** — formulas embedded in the file will calculate automatically when the user opens it in Excel or Google Sheets. No recalc script needed.
 
 ## Reading and analyzing data
 
@@ -133,19 +138,6 @@ This applies to ALL calculations - totals, percentages, ratios, differences, etc
 2. **Create/Load**: Create new workbook or load existing file
 3. **Modify**: Add/edit data, formulas, and formatting
 4. **Save**: Write to file
-5. **Recalculate formulas (MANDATORY IF USING FORMULAS)**: Use the scripts/recalc.py script
-   ```bash
-   python scripts/recalc.py output.xlsx
-   ```
-6. **Verify and fix any errors**: 
-   - The script returns JSON with error details
-   - If `status` is `errors_found`, check `error_summary` for specific error types and locations
-   - Fix the identified errors and recalculate again
-   - Common errors to fix:
-     - `#REF!`: Invalid cell references
-     - `#DIV/0!`: Division by zero
-     - `#VALUE!`: Wrong data type in formula
-     - `#NAME?`: Unrecognized formula name
 
 ### Creating new Excel files
 
@@ -202,26 +194,6 @@ new_sheet['A1'] = 'Data'
 
 wb.save('modified.xlsx')
 ```
-
-## Recalculating formulas
-
-Excel files created or modified by openpyxl contain formulas as strings but not calculated values. Use the provided `scripts/recalc.py` script to recalculate formulas:
-
-```bash
-python scripts/recalc.py <excel_file> [timeout_seconds]
-```
-
-Example:
-```bash
-python scripts/recalc.py output.xlsx 30
-```
-
-The script:
-- Automatically sets up LibreOffice macro on first run
-- Recalculates all formulas in all sheets
-- Scans ALL cells for Excel errors (#REF!, #DIV/0!, etc.)
-- Returns JSON with detailed error locations and counts
-- Works on both Linux and macOS
 
 ## Formula Verification Checklist
 
