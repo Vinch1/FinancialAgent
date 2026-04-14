@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "dWtAZ95wArc=",
+  "success": true,
+  "projectFilePath": "/Users/aimpactaccelerator/Documents/Projects/FinancialAgent/.claude/skills/minimax-docx/scripts/dotnet/MiniMaxAIDocx.Cli/MiniMaxAIDocx.Cli.csproj",
+  "expectedPackageFiles": [
+    "/Users/aimpactaccelerator/.nuget/packages/documentformat.openxml/3.5.1/documentformat.openxml.3.5.1.nupkg.sha512",
+    "/Users/aimpactaccelerator/.nuget/packages/documentformat.openxml.framework/3.5.1/documentformat.openxml.framework.3.5.1.nupkg.sha512",
+    "/Users/aimpactaccelerator/.nuget/packages/system.commandline/2.0.5/system.commandline.2.0.5.nupkg.sha512",
+    "/Users/aimpactaccelerator/.nuget/packages/system.io.packaging/10.0.2/system.io.packaging.10.0.2.nupkg.sha512"
+  ],
+  "logs": []
+}
