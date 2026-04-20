@@ -197,7 +197,7 @@ After the last data row, add a summary row (`last_table_row + 1`):
 
 ### Step 4: Confirm
 
-Report the generated file path to the user and confirm all parameters were applied correctly.
+Check if all workflow are satisfied. Report the generated file path to the user and confirm all parameters were applied correctly.
 
 ## Important Notes
 
