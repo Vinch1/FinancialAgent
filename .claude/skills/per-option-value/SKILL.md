@@ -18,7 +18,7 @@ This skill calculates the fair value of employee stock options using the Enhance
 
 ## Step 1: Collect Information from User
 
-Collect parameters **one by one** in a conversational manner. Ask for one parameter, wait for the user's response, then ask for the next one. Do not present all questions at once.
+Collect parameters **one by one** in a conversational manner. Ask for one parameter. Provide a brief description of what it represents, wait for the user's response, then ask for the next one. Do not present all questions at once.
 
 **Asking order:**
 - Client Name

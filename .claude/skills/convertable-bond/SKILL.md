@@ -27,18 +27,19 @@ Ask the user for each parameter **one by one** in this order:
 | 4 | ConversionPrice | `{{ConversionPrice}}` | Number | 50.00 |
 | 5 | MaturityDate | `{{MaturityDate}}` | Date | "Dec 31, 2030" |
 | 6 | InterestRate | `{{InterestRate}}` | Percentage | 2.5% |
-| 7 | CurrencyUnit | `{{CurrencyUnit}}` | Text | "USD" or " HKD" |
-| 8 | RiskFreeRate | `{{RiskFreeRate}}` | Percentage | 4.0% |
-| 9 | CreditRiskPremium | `{{CreditRiskPremium}}` | Percentage | 1.5% |
-| 10 | LiquidityRiskPremium | `{{LiquidityRiskPremium}}` | Percentage | 1.0% |
-| 11 | OtherRisk | `{{OtherRisk}}` | Percentage | 0.5% |
-| 12 | FirstDateToPay | `{{FirstDateToPay}}` | Date | "Jun 15, 2025" |
-| 13 | SportPrice | `{{SportPrice}}` | Number | 45.00 |
-| 14 | Volatility | `{{Volatility}}` | Percentage | 30% |
-| 15 | DividendYield | `{{DividendYield}}` | Percentage | 2.0% |
-| 16 | LastCouponPaymentDate | `{{LastCouponPaymentDate}}` | Date | "Dec 15, 2024" |
-| 17 | OutstandingNumberOfShares | `{{OutstandingNumberOfShares}}` | Number | 1000000000 |
-| 18 | DilutionEffect | `{{DilutionEffect}}` | 0 or 1 | 1 |
+| 7 | CouponFrequency | *(variable, no placeholder)* | Choice | "Annually", "Semi-annually", or "Quarterly" |
+| 8 | CurrencyUnit | `{{CurrencyUnit}}` | Text | "USD" or " HKD" |
+| 9 | RiskFreeRate | `{{RiskFreeRate}}` | Percentage | 4.0% |
+| 10 | CreditRiskPremium | `{{CreditRiskPremium}}` | Percentage | 1.5% |
+| 11 | LiquidityRiskPremium | `{{LiquidityRiskPremium}}` | Percentage | 1.0% |
+| 12 | OtherRisk | `{{OtherRisk}}` | Percentage | 0.5% |
+| 13 | FirstDateToPay | `{{FirstDateToPay}}` | Date | "Jun 15, 2025" |
+| 14 | SportPrice | `{{SportPrice}}` | Number | 45.00 |
+| 15 | Volatility | `{{Volatility}}` | Percentage | 30% |
+| 16 | DividendYield | `{{DividendYield}}` | Percentage | 2.0% |
+| 17 | LastCouponPaymentDate | `{{LastCouponPaymentDate}}` | Date | "Dec 15, 2024" |
+| 18 | OutstandingNumberOfShares | `{{OutstandingNumberOfShares}}` | Number | 1000000000 |
+| 19 | DilutionEffect | `{{DilutionEffect}}` | 0 or 1 | 1 |
 
 ## Workflow
 
@@ -50,6 +51,11 @@ Ask for each parameter one at a time. For each one:
 - Give an example value so the user knows the expected format
 
 For **date parameters** (ValuationDate, IssueDate, MaturityDate, FirstDateToPay, LastCouponPaymentDate): accept natural language like "June 30, 2025" or "2025-06-30".
+
+For **CouponFrequency**: accept "Annually", "Semi-annually", or "Quarterly". This is a variable (not a template placeholder) that controls the month increment used in coupon date formulas:
+- "Annually" → 12 months
+- "Semi-annually" → 6 months
+- "Quarterly" → 3 months
 
 For **percentage parameters** (InterestRate, RiskFreeRate, CreditRiskPremium, LiquidityRiskPremium, OtherRisk, Volatility, DividendYield): accept percentage notation (e.g. "2.5%", "4%") and convert to decimal (0.025, 0.04) for the replacement value.
 
@@ -109,10 +115,13 @@ After all `{{Placeholder}}` values are replaced, rows 17 and below in columns B 
 #### Column B — Coupon Payment Dates
 
 **Formula rule for each cell:**
-- Each cell = previous cell + 12 months, capped at MaturityDate
-- Formula pattern: `=IF(EDATE(B{prev_row}, 12) > C$8, C$8, EDATE(B{prev_row}, 12))`
-  - B17: `=IF(EDATE(B16, 12) > C$8, C$8, EDATE(B16, 12))`
-  - B18: `=IF(EDATE(B17, 12) > C$8, C$8, EDATE(B17, 12))`
+- Each cell = previous cell + N months (based on CouponFrequency), capped at MaturityDate
+  - Annually: N = 12
+  - Semi-annually: N = 6
+  - Quarterly: N = 3
+- Formula pattern: `=IF(EDATE(B{prev_row}, N) > C$8, C$8, EDATE(B{prev_row}, N))`
+  - B17: `=IF(EDATE(B16, N) > C$8, C$8, EDATE(B16, N))`
+  - B18: `=IF(EDATE(B17, N) > C$8, C$8, EDATE(B17, N))`
   - ...and so on
 
 **Stop condition:** Do not generate the next row if the current cell already equals B8 (maturity date). The last generated cell must always equal B8 (maturity date).
@@ -128,15 +137,15 @@ For each row that has a date in column B, generate the corresponding coupon amou
 
 The YEARFRAC calculates the year fraction between the current and previous coupon dates using day count basis 3 (Actual/365).
 
-**Example:** FirstDateToPay = Jun 15, 2025, MaturityDate = Dec 31, 2030
+**Example (Semi-annually, N=6):** FirstDateToPay = Jun 15, 2025, MaturityDate = Dec 31, 2030
 | Row | Column B (Date) | Column C (Coupon Amount) |
 |-----|-----------------|--------------------------|
-| 17 | Jun 15, 2026 | `=C$4*$C$10*YEARFRAC(B17,B16,3)` |
-| 18 | Jun 15, 2027 | `=C$4*$C$10*YEARFRAC(B18,B17,3)` |
-| 19 | Jun 15, 2028 | `=C$4*$C$10*YEARFRAC(B19,B18,3)` |
-| 20 | Jun 15, 2029 | `=C$4*$C$10*YEARFRAC(B20,B19,3)` |
-| 21 | Jun 15, 2030 | `=C$4*$C$10*YEARFRAC(B21,B20,3)` |
-| 22 | Dec 31, 2030 (capped → stop) | `=C$4*$C$10*YEARFRAC(B22,B21,3)` |
+| 17 | Dec 15, 2025 | `=C$4*$C$10*YEARFRAC(B17,B16,3)` |
+| 18 | Jun 15, 2026 | `=C$4*$C$10*YEARFRAC(B18,B17,3)` |
+| 19 | Dec 15, 2026 | `=C$4*$C$10*YEARFRAC(B19,B18,3)` |
+| 20 | Jun 15, 2027 | `=C$4*$C$10*YEARFRAC(B20,B19,3)` |
+| ... | ... (+ 6 months each row) | ... |
+| 30 | Dec 31, 2030 (capped → stop) | `=C$4*$C$10*YEARFRAC(B30,B29,3)` |
 
 #### Full CB sheet — Transpose Coupon Dates and Amounts
 
@@ -171,13 +180,13 @@ For each row `r` (starting at 14), where `input_row = r - 14 + 16`:
 
 **Note:** C$3 and C$10 refer to cells in the `Straight Debt` sheet (not the Input sheet). C3 is typically the valuation date reference, and C10 is the discount rate.
 
-**Example:** If auto-generated rows go from B16 to B22 (7 coupon dates), the Straight Debt table is rows 14–20:
+**Example:** If auto-generated rows go from B16 to B30 (15 coupon dates, semi-annually), the Straight Debt table is rows 14–28:
 | Row | B (Date) | C (Interest) | D (Principal) | E (TTM) | F (PV) |
 |-----|----------|-------------|--------------|---------|--------|
 | 14 | `=Input!B16` | `=IF(B14<C$3,"",Input!C16)` | *(empty)* | `=IF(B14<C$3,0,YEARFRAC(B14,C$3,3))` | `=SUM(C14:D14)/(1+C$10)^E14` |
 | 15 | `=Input!B17` | `=IF(B15<C$3,"",Input!C17)` | *(empty)* | `=IF(B15<C$3,0,YEARFRAC(B15,C$3,3))` | `=SUM(C15:D15)/(1+C$10)^E15` |
 | ... | ... | ... | ... | ... | ... |
-| 20 | `=Input!B22` | `=IF(B20<C$3,"",Input!C22)` | `=Input!C4` | `=IF(B20<C$3,0,YEARFRAC(B20,C$3,3))` | `=SUM(C20:D20)/(1+C$10)^E20` |
+| 28 | `=Input!B30` | `=IF(B28<C$3,"",Input!C30)` | `=Input!C4` | `=IF(B28<C$3,0,YEARFRAC(B28,C$3,3))` | `=SUM(C28:D28)/(1+C$10)^E28` |
 
 #### Straight Debt sheet — Total PV Row
 
@@ -191,9 +200,9 @@ After the last data row, add a summary row (`last_table_row + 1`):
 | E | *(empty)* |
 | F | `=ROUND(SUM(F14:F{last_table_row}), -4)` |
 
-**Example:** If the table data is rows 14–20, the Total PV row is row 21:
-- B21: `Total PV`
-- F21: `=ROUND(SUM(F14:F20), -4)`
+**Example:** If the table data is rows 14–28, the Total PV row is row 29:
+- B29: `Total PV`
+- F29: `=ROUND(SUM(F14:F28), -4)`
 
 ### Step 4: Confirm
 
