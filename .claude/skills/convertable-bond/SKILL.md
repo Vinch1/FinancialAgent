@@ -154,7 +154,7 @@ After generating the coupon date rows in the `Input` sheet, set the following ce
 - **Cell I2**: `=TRANSPOSE(Input!B16:B{last_row})` — transposes coupon payment dates
 - **Cell I5**: `=TRANSPOSE(Input!C16:C{last_row})` — transposes coupon payment amounts
 
-**IMPORTANT:** These TRANSPOSE formulas must be written as **array formulas** (CSE / Ctrl+Shift+Enter style). Do NOT write them as regular formulas — Excel will add `@` implicit intersection operators and break the output. In openpyxl, use `Worksheet.array_formula` or set the cell's `value` with proper array formula syntax (wrapped in `{}`) to avoid the `@` prefix.
+**IMPORTANT:** These TRANSPOSE formulas must be written as **array formulas** (CSE / Ctrl+Shift+Enter style). Do NOT write them as regular formulas — Excel will add `@` implicit intersection operators and break the output. For example, don't write "=@TRANSPOSE(@Input!C16:C22)", write "=TRANSPOSE(ssInput!C16:C22)" In openpyxl, use `Worksheet.array_formula` or set the cell's `value` with proper array formula syntax (wrapped in `{}`) to avoid the `@` prefix.
 
 `{last_row}` is the last auto-generated row number from the coupon rows above.
 
