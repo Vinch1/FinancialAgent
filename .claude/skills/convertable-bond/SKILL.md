@@ -38,6 +38,17 @@ Ask the user for each parameter **one by one** in this order:
 | 15 | LastCouponPaymentDate | `{{LastCouponPaymentDate}}` | Date | "Dec 15, 2024" |
 | 16 | DilutionEffect | `{{DilutionEffect}}` | 0 or 1 | 1 |
 
+**Optional Parameters (ask after all required parameters):**
+
+| # | Parameter | Placeholder | Type | Example |
+|---|-----------|-------------|------|---------|
+| 17 | CallStartDate | `{{CallStartDate}}` | Date | "Jun 15, 2026" |
+| 18 | CallEndDate | `{{CallEndDate}}` | Date | "Dec 31, 2029" |
+| 19 | PutStartDate | `{{PutStartDate}}` | Date | "Jun 15, 2027" |
+| 20 | PutEndDate | `{{PutEndDate}}` | Date | "Dec 31, 2029" |
+| 21 | CallPrice | `{{CallPrice}}` | Number | 105.00 |
+| 22 | PutPrice | `{{PutPrice}}` | Number | 98.00 |
+
 ## Workflow
 
 ### Step 1: Collect Parameters
@@ -63,6 +74,8 @@ For **CouponFrequency**: accept "Annually", "Semi-annually", or "Quarterly". Thi
 For **percentage parameters** (InterestRate, RiskFreeRate, DiscountRate, Volatility, DividendYield): accept percentage notation (e.g. "2.5%", "4%") and convert to decimal (0.025, 0.04) for the replacement value.
 
 For **DilutionEffect**: accept 0 or 1 only. Explain that 1 means dilution is considered, 0 means it is not.
+
+For **optional parameters** (CallStartDate, CallEndDate, PutStartDate, PutEndDate, CallPrice, PutPrice): after collecting all required parameters (#1–#16), ask the user **in a single question** whether Call and Put provisions are applicable for this bond. If the user says they are not applicable, replace all six placeholders with empty strings. If applicable, collect all six values (CallStartDate, CallEndDate, CallPrice, PutStartDate, PutEndDate, PutPrice) as date/number values following the same format rules as required parameters.
 
 ### Step 2: Prepare Replacement Values
 
@@ -93,6 +106,12 @@ Build a complete replacement map. For percentage fields, write the decimal value
 {{DividendYield}}       → <decimal> with cell format 0.0%
 {{LastCouponPaymentDate}} → =DATE(year,month,day)
 {{DilutionEffect}}      → 0 or 1
+{{CallStartDate}}       → =DATE(year,month,day) or empty (if not applicable)
+{{CallEndDate}}         → =DATE(year,month,day) or empty (if not applicable)
+{{PutStartDate}}        → =DATE(year,month,day) or empty (if not applicable)
+{{PutEndDate}}          → =DATE(year,month,day) or empty (if not applicable)
+{{CallPrice}}           → <number> or empty (if not applicable)
+{{PutPrice}}            → <number> or empty (if not applicable)
 ```
 
 ### Step 3: Prepare Formulas
