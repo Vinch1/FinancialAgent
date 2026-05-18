@@ -49,51 +49,54 @@ export function MessageInput({ onSend, isLoading }: MessageInputProps) {
   }, [handleSend]);
 
   return (
-    <div className="p-4 border-t border-paper-200 bg-paper-100">
-      <div className="max-w-3xl mx-auto">
-        <div className="flex items-end gap-3 bg-white border border-paper-300 rounded-xl px-4 py-3 shadow-soft focus-within:border-ink-400 focus-within:shadow-soft-lg transition-all duration-200">
-          <textarea
-            ref={textareaRef}
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="Ask anything..."
-            disabled={isLoading}
-            rows={1}
-            className="flex-1 resize-none bg-transparent text-ink-800 placeholder:text-ink-400 focus:outline-none text-sm leading-relaxed"
-          />
+    <div className="border-t border-slate-200/80 bg-white/85 px-5 py-4 backdrop-blur lg:px-8">
+      <div className="mx-auto max-w-4xl">
+        <div className="rounded-[1.5rem] border border-slate-200 bg-white p-2 shadow-xl shadow-slate-200/70 transition-all duration-200 focus-within:border-teal-300 focus-within:shadow-teal-100/80">
+          <div className="flex items-end gap-3 rounded-[1.15rem] bg-slate-50 px-4 py-3">
+            <textarea
+              ref={textareaRef}
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Ask for a valuation, market brief, or research summary..."
+              disabled={isLoading}
+              rows={1}
+              className="min-h-[2rem] flex-1 resize-none bg-transparent text-sm leading-7 text-slate-900 placeholder:text-slate-400 focus:outline-none"
+            />
 
-          <button
-            onClick={handleSend}
-            disabled={!value.trim() || isLoading}
-            className={`
-              flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center
-              transition-all duration-200
-              ${
-                value.trim() && !isLoading
-                  ? 'bg-accent text-white hover:bg-accent-dark'
-                  : 'bg-paper-200 text-ink-400 cursor-not-allowed'
-              }
-            `}
-          >
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+            <button
+              onClick={handleSend}
+              disabled={!value.trim() || isLoading}
+              className={`
+                flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-2xl
+                transition-all duration-200
+                ${
+                  value.trim() && !isLoading
+                    ? 'bg-teal-600 text-white shadow-lg shadow-teal-600/25 hover:-translate-y-0.5 hover:bg-teal-700'
+                    : 'cursor-not-allowed bg-slate-200 text-slate-400'
+                }
+              `}
+              aria-label="Send message"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-              />
-            </svg>
-          </button>
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
 
-        <p className="text-xs text-ink-400 text-center mt-2">
-          Press Enter to send, Shift+Enter for new line
+        <p className="mt-3 text-center text-xs text-slate-400">
+          Press Enter to send, Shift+Enter for a new line. Financial outputs should be independently reviewed.
         </p>
       </div>
     </div>
