@@ -25,9 +25,9 @@ export function MessageList({ messages, isLoading }: MessageListProps) {
   return (
     <div
       ref={containerRef}
-      className="flex-1 overflow-y-auto px-6 py-6"
+      className="flex-1 overflow-y-auto px-5 py-6 lg:px-8"
     >
-      <div className="max-w-3xl mx-auto space-y-6">
+      <div className="mx-auto max-w-4xl space-y-6">
         {messages.map((message, index) => (
           <Message
             key={message.id}
@@ -39,9 +39,9 @@ export function MessageList({ messages, isLoading }: MessageListProps) {
         {/* Loading indicator */}
         {isLoading && messages[messages.length - 1]?.role === 'user' && (
           <div className="flex items-start gap-3 animate-fade-in">
-            <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
+            <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-2xl border border-teal-100 bg-white text-teal-600 shadow-sm">
               <svg
-                className="w-4 h-4 text-accent"
+                className="h-5 w-5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -54,11 +54,11 @@ export function MessageList({ messages, isLoading }: MessageListProps) {
                 />
               </svg>
             </div>
-            <div className="bg-paper-200 rounded-2xl rounded-tl-md px-4 py-3">
-              <div className="flex items-center gap-1">
-                <span className="w-2 h-2 bg-ink-400 rounded-full animate-pulse-soft" />
-                <span className="w-2 h-2 bg-ink-400 rounded-full animate-pulse-soft" style={{ animationDelay: '0.2s' }} />
-                <span className="w-2 h-2 bg-ink-400 rounded-full animate-pulse-soft" style={{ animationDelay: '0.4s' }} />
+            <div className="rounded-2xl rounded-tl-md border border-slate-200 bg-white px-5 py-4 shadow-sm">
+              <div className="flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full bg-teal-500 animate-pulse-soft" />
+                <span className="h-2 w-2 rounded-full bg-teal-500 animate-pulse-soft" style={{ animationDelay: '0.2s' }} />
+                <span className="h-2 w-2 rounded-full bg-teal-500 animate-pulse-soft" style={{ animationDelay: '0.4s' }} />
               </div>
             </div>
           </div>

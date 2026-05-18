@@ -9,11 +9,11 @@
   }
 
   body {
-    @apply bg-paper-100 text-ink-800 font-body;
+    @apply bg-slate-950 text-slate-900 font-body;
   }
 
   ::selection {
-    @apply bg-accent/20 text-ink-900;
+    @apply bg-teal-200 text-slate-950;
   }
 
   ::-webkit-scrollbar {
@@ -25,23 +25,23 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-ink-200 rounded-full;
+    @apply rounded-full bg-slate-300;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-ink-300;
+    @apply bg-slate-400;
   }
 }
 
 @layer components {
   .message-prose {
-    @apply text-ink-700 leading-relaxed;
+    @apply text-sm leading-7 text-slate-700;
   }
 
   .message-prose h1,
   .message-prose h2,
   .message-prose h3 {
-    @apply font-display text-ink-800 font-semibold mt-6 mb-3 first:mt-0;
+    @apply mt-6 mb-3 font-display font-semibold text-slate-950 first:mt-0;
   }
 
   .message-prose h1 {
@@ -78,30 +78,30 @@
   }
 
   .message-prose code {
-    @apply bg-paper-200 text-ink-700 px-1.5 py-0.5 rounded text-sm font-mono;
+    @apply rounded-md bg-slate-100 px-1.5 py-0.5 font-mono text-sm text-slate-800;
   }
 
   .message-prose pre {
-    @apply bg-ink-800 text-ink-100 p-4 rounded-lg mb-4 overflow-x-auto;
+    @apply mb-4 overflow-x-auto rounded-xl bg-slate-950 p-4 text-slate-100;
   }
 
   .message-prose pre code {
-    @apply bg-transparent text-inherit p-0;
+    @apply bg-transparent p-0 text-inherit;
   }
 
   .message-prose blockquote {
-    @apply border-l-4 border-accent/40 pl-4 italic text-ink-500 my-4;
+    @apply my-4 border-l-4 border-teal-300 pl-4 italic text-slate-500;
   }
 
   .message-prose a {
-    @apply text-accent hover:text-accent-dark underline underline-offset-2;
+    @apply font-medium text-teal-700 underline underline-offset-2 hover:text-teal-800;
   }
 
   .message-prose strong {
-    @apply font-semibold text-ink-800;
+    @apply font-semibold text-slate-950;
   }
 
   .message-prose hr {
-    @apply border-ink-200 my-6;
+    @apply my-6 border-slate-200;
   }
 }
